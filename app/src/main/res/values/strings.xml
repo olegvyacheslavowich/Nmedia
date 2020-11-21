@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Nmedia</string>
+    <string name="description">My first app on android</string>
 </resources>
