@@ -1,0 +1,32 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "author": "Netology. University of Internet professions of the future",
+      "authorAvatar": "@sample/postavatars",
+      "published": "31 dec. 2020",
+      "content": "Android is the most popular mobile platform, so there is a shortage of Android developers: more than 500 vacancies appear every month (according to hh.ru). \n\nAndroid developers are needed in different areas: to make online banking with a complex degree of protection or an application for search for a soul mate, develop applications for learning English or a mobile service for finding flights.",
+      "likesCount": "184",
+      "viewsCount": "250",
+      "shareCount": "57",
+      "menuImage": "@sample/postmenu",
+      "shareImage": "@sample/postshare",
+      "likeImage": "@sample/postlike",
+      "viewsImage": "@sample/postviews"
+    },
+    {
+      "id": 2,
+      "author": "Netology. University of Internet professions of the future",
+      "authorAvatar": "@sample/postavatars",
+      "published": "21 dec. 2020",
+      "likesCount": "184004",
+      "viewsCount": "424353",
+      "shareCount": "5460",
+      "content": "Java and Kotlin are the leading programming languages ​​for Android. \n \nJava consistently ranks 1st or 2nd in popularity among programmers (according to the TIOBE Programming Language Index). It is a classic, strongly typed language that is great for beginners. Most mobile applications are written in Java",
+      "menuImage": "@sample/postmenu",
+      "shareImage": "@sample/postshare",
+      "likeImage": "@sample/postlike",
+      "viewsImage": "@sample/postviews"
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp">
+
+
+    <ImageView
+        android:id="@+id/authorImageView"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@sample/posts.json/data/authorAvatar[0]" />
+
+    <TextView
+        android:id="@+id/authorTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/colorTitle"
+        app:layout_constraintBottom_toTopOf="@id/publishedTextView"
+        app:layout_constraintStart_toEndOf="@id/authorImageView"
+        app:layout_constraintTop_toTopOf="@id/authorImageView"
+        app:layout_constraintEnd_toStartOf="@id/menu"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@sample/posts.json/data/author[0]" />
+
+    <TextView
+        android:id="@+id/publishedTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toRightOf="@id/authorImageView"
+        app:layout_constraintBottom_toBottomOf="@id/authorImageView"
+        app:layout_constraintTop_toBottomOf="@id/authorTextView"
+        tools:text="@sample/posts.json/data/published[0]" />
+
+    <ImageView
+        android:id="@+id/menu"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        tools:srcCompat="@sample/posts.json/data/menuImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="menu, authorImageView, authorTextView"/>
+
+    <TextView
+        android:id="@+id/contentTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/barrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
+        tools:text="@sample/posts.json/data/content" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/bottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="contentTextView" />
+
+    <ImageView
+        android:id="@+id/likesImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/bottomBarrier"
+        app:layout_constraintEnd_toStartOf="@id/likesTextView"
+        tools:srcCompat="@sample/postlike"/>
+
+    <TextView
+        android:id="@+id/likesTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/likesImageView"
+        app:layout_constraintBottom_toBottomOf="@id/likesImageView"
+        app:layout_constraintStart_toEndOf="@+id/likesImageView"
+        tools:text="@sample/posts.json/data/likesCount[1]"/>
+
+    <ImageView
+        android:id="@+id/shareImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/likesTextView"
+        app:layout_constraintTop_toTopOf="@id/bottomBarrier"
+        app:layout_constraintEnd_toStartOf="@id/shareTextView"
+        tools:srcCompat="@sample/postshare"/>
+
+    <TextView
+        android:id="@+id/shareTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/shareImageView"
+        app:layout_constraintBottom_toBottomOf="@id/shareImageView"
+        app:layout_constraintStart_toEndOf="@+id/shareImageView"
+        tools:text="@sample/posts.json/data/shareCount[1]"/>
+
+    <ImageView
+        android:id="@+id/viewsImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/bottomBarrier"
+        app:layout_constraintEnd_toStartOf="@id/viewsTextView"
+        tools:srcCompat="@sample/postviews"/>
+
+    <TextView
+        android:id="@+id/viewsTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/viewsImageView"
+        app:layout_constraintBottom_toBottomOf="@id/viewsImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@sample/posts.json/data/viewsCount[1]"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
