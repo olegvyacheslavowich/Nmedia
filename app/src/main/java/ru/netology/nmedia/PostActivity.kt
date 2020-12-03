@@ -50,18 +50,6 @@ class PostActivity : AppCompatActivity() {
 
             }
 
-            shareImageView.setOnClickListener {
-
-                post = post.copy(shareCount = post.shareCount + 1)
-                shareTextView.text = Util.parseNumber(post.shareCount)
-
-            }
-
-            root.setOnClickListener{
-                val toast = Toast.makeText(applicationContext, "root element click", Toast.LENGTH_SHORT)
-                toast.show()
-            }
-
             authorImageView.setOnClickListener{
                 val toast = Toast.makeText(applicationContext, "author image view click", Toast.LENGTH_SHORT)
                 toast.show()
