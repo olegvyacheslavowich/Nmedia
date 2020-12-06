@@ -1,8 +1,8 @@
-package ru.netology.nmedia
+package ru.netology.nmedia.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ru.netology.nmedia.databinding.ActivityPostBinding
+import ru.netology.nmedia.R
 
 class MainActivity : AppCompatActivity() {
 
