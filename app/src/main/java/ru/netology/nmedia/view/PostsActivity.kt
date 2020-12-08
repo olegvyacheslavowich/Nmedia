@@ -30,7 +30,7 @@ class PostsActivity : AppCompatActivity() {
         binding.postsRecyclerView.adapter = postAdapter
 
         viewModel.dataList.observe(this) {
-            postAdapter.posts = it
+            postAdapter.submitList(it)
         }
     }
 }

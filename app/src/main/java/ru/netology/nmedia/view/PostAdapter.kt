@@ -2,6 +2,8 @@ package ru.netology.nmedia.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.ActivityPostBinding
@@ -14,13 +16,7 @@ interface OnInteractionListener {
 }
 
 class PostAdapter(private val onInteractionListener: OnInteractionListener) :
-    RecyclerView.Adapter<PostViewHolder>() {
-
-    var posts = emptyList<Post>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding =
@@ -29,11 +25,7 @@ class PostAdapter(private val onInteractionListener: OnInteractionListener) :
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(posts[position])
-    }
-
-    override fun getItemCount(): Int {
-        return posts.size
+        holder.bind(getItem(position))
     }
 }
 
@@ -64,4 +56,14 @@ class PostViewHolder(
         }
     }
 
+}
+
+class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
+    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+        return oldItem == newItem
+    }
 }
