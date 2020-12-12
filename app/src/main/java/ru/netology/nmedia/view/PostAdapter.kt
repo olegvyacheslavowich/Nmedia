@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.ActivityPostBinding
-import ru.netology.nmedia.model.Post
+import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.util.Util
 
 interface OnInteractionListener {

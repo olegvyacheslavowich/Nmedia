@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">НМедиа</string>
     <string name="description">Мое первое приложение на андроид</string>
+    <string name="posts_title">Новости</string>
+    <string name="ad_title">Реклама</string>
 </resources>

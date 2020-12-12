@@ -1,10 +1,9 @@
-package ru.netology.nmedia.model.impl
+package ru.netology.nmedia.model.post.impl
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import ru.netology.nmedia.model.Post
-import ru.netology.nmedia.model.PostRepository
-import ru.netology.nmedia.util.Util
+import ru.netology.nmedia.model.post.Post
+import ru.netology.nmedia.model.post.PostRepository
 
 class PostRepositoryInMemoryImpl : PostRepository {
 

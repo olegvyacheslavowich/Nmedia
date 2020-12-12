@@ -3,8 +3,9 @@ package ru.netology.nmedia.view
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ConcatAdapter
 import ru.netology.nmedia.databinding.ActivityPostsBinding
-import ru.netology.nmedia.model.Post
+import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class PostsActivity : AppCompatActivity() {
@@ -27,10 +28,18 @@ class PostsActivity : AppCompatActivity() {
             }
         })
 
-        binding.postsRecyclerView.adapter = postAdapter
-
         viewModel.dataList.observe(this) {
             postAdapter.submitList(it)
         }
+
+        val adAdapter = AdAdapter()
+        viewModel.adData.observe(this){
+            adAdapter.submitList(it)
+        }
+
+        val adapters = listOf(adAdapter, postAdapter)
+        val mergeAdapter = ConcatAdapter(adapters)
+
+        binding.postsRecyclerView.adapter = mergeAdapter
     }
 }
