@@ -28,7 +28,7 @@
         app:layout_constraintBottom_toTopOf="@id/publishedTextView"
         app:layout_constraintStart_toEndOf="@id/authorImageView"
         app:layout_constraintTop_toTopOf="@id/authorImageView"
-        app:layout_constraintEnd_toStartOf="@id/menu"
+        app:layout_constraintEnd_toStartOf="@id/postMenuImageView"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="@sample/posts.json/data/author[0]" />
 
@@ -43,7 +43,7 @@
         tools:text="@sample/posts.json/data/published[0]" />
 
     <ImageView
-        android:id="@+id/menu"
+        android:id="@+id/postMenuImageView"
         android:layout_width="32dp"
         android:layout_height="32dp"
         tools:srcCompat="@sample/posts.json/data/menuImage"
@@ -56,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="menu, authorImageView, authorTextView"/>
+        app:constraint_referenced_ids="postMenuImageView, authorImageView, authorTextView"/>
 
     <TextView
         android:id="@+id/contentTextView"

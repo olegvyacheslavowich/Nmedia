@@ -3,4 +3,6 @@
     <string name="description">My first app on android www.google.com</string>
     <string name="ad_title">Ad</string>
     <string name="posts_title">News</string>
+    <string name="remove">Remove</string>
+    <string name="edit">Edit</string>
 </resources>

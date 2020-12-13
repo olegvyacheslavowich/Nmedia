@@ -1,6 +1,10 @@
 package ru.netology.nmedia.util
 
+import android.app.Activity
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import java.math.BigDecimal
+
 
 object Util {
 
@@ -26,6 +30,12 @@ object Util {
             0 -> currentNumber.setScale(0, BigDecimal.ROUND_DOWN).toString()
             else -> currentNumber.toString()
         }
+    }
+
+    public fun hideKeyboard(view: View) {
+        val imm: InputMethodManager =
+            view.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
 }

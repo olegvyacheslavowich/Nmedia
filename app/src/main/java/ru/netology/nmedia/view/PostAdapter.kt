@@ -2,6 +2,7 @@ package ru.netology.nmedia.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,8 @@ import ru.netology.nmedia.util.Util
 interface OnInteractionListener {
     fun onLike(post: Post)
     fun onShare(post: Post)
+    fun onRemove(post: Post)
+    fun onEdit(post: Post)
 }
 
 class PostAdapter(private val onInteractionListener: OnInteractionListener) :
@@ -21,6 +24,7 @@ class PostAdapter(private val onInteractionListener: OnInteractionListener) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding =
             ActivityPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
         return PostViewHolder(binding, onInteractionListener)
     }
 
@@ -53,6 +57,26 @@ class PostViewHolder(
             shareImageView.setOnClickListener {
                 onInteractionListener.onShare(post)
             }
+
+            postMenuImageView.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.post_menu)
+                    setOnMenuItemClickListener {
+                        when (it.itemId) {
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(post)
+                                true
+                            }
+                            R.id.edit -> {
+                                onInteractionListener.onEdit(post)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                }.show()
+            }
+
         }
     }
 
