@@ -1,6 +1,6 @@
 package ru.netology.nmedia.model.post
 
-data class Post (
+data class Post(
     val id: Int,
     val author: String,
     val published: String,
@@ -11,3 +11,21 @@ data class Post (
     val shareCount: Int = 0,
     val viewCount: Int = 0
 )
+
+fun getEmptyPost(): Post {
+    return Post(
+        0,
+        "Me",
+        "Now",
+        "",
+        false,
+        0,
+        false,
+        0,
+        0
+    )
+}
+
+
+
+

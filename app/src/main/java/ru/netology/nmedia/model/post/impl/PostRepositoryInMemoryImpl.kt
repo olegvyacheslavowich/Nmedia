@@ -7,6 +7,8 @@ import ru.netology.nmedia.model.post.PostRepository
 
 class PostRepositoryInMemoryImpl : PostRepository {
 
+    private var currentId: Int = 1
+
     private var post = Post(
         0,
         "Natali Karpenko",
@@ -21,7 +23,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
 
     private var posts = listOf(
         Post(
-            0,
+            currentId++,
             "Oleg Karpenko",
             "12 december 2019",
             "Android is the most popular mobile platform",
@@ -32,7 +34,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
             100_345
         ),
         Post(
-            1,
+            currentId++,
             "Natali Karpenko",
             "22 december 2019",
             "Android developers are needed in different areas: to make online banking with a complex degree of protection or an application for...",
@@ -43,7 +45,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
             67
         ),
         Post(
-            2,
+            currentId++,
             "Alex Karpenko",
             "17 december 2021",
             "...for a soul mate, develop applications for learning English or a mobile service for finding flights.",
@@ -55,7 +57,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
         ),
 
         Post(
-            5,
+            currentId++,
             "Michel Jordam",
             "24 december 2020",
             "English or a mobile service for finding flights.",
@@ -67,7 +69,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
         ),
 
         Post(
-            77,
+            currentId++,
             "John Kalm",
             "26 december 2020",
             "Hello world.",
@@ -114,4 +116,26 @@ class PostRepositoryInMemoryImpl : PostRepository {
         }
         dataPosts.value = posts
     }
+
+    override fun removeById(id: Int) {
+        posts = posts.filter { it.id != id}
+        dataPosts.value = posts
+    }
+
+    override fun save(post: Post) {
+
+        if (post.id == 0) {
+            posts = listOf(
+                post.copy(id = currentId++)
+            ) + posts
+            dataPosts.value = posts
+        }
+
+        posts = posts.map {
+            if (post.id != it.id) it else it.copy(content = post.content)
+        }
+
+        dataPosts.value = posts
+    }
+
 }

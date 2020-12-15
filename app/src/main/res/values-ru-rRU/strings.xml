@@ -4,4 +4,6 @@
     <string name="description">Мое первое приложение на андроид</string>
     <string name="posts_title">Новости</string>
     <string name="ad_title">Реклама</string>
+    <string name="remove">Удалить</string>
+    <string name="edit">Изменить</string>
 </resources>
