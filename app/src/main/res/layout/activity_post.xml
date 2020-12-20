@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
-
     <ImageView
         android:id="@+id/authorImageView"
         android:layout_width="64dp"
@@ -78,67 +77,41 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="contentTextView" />
 
-    <ImageView
-        android:id="@+id/likesImageView"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="8dp"
-        android:padding="4dp"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/likesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        app:icon="@drawable/ic_like"
+        app:iconTint="@color/ic_like"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/bottomBarrier"
-        app:layout_constraintEnd_toStartOf="@id/likesTextView"
-        app:srcCompat="@drawable/ic_thumb_up_black_24dp"
-        tools:srcCompat="@sample/postlike"/>
+        app:layout_constraintEnd_toStartOf="@id/shareButton"
+        tools:textColor="@color/ic_like"
+        tools:text="@sample/posts.json/data/likesCount"
+        style="@style/ButtonStyle"/>
 
-    <TextView
-        android:id="@+id/likesTextView"
-        android:layout_width="0dp"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/shareButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/likesImageView"
-        app:layout_constraintBottom_toBottomOf="@id/likesImageView"
-        app:layout_constraintStart_toEndOf="@+id/likesImageView"
-        tools:text="@sample/posts.json/data/likesCount[1]"/>
-
-    <ImageView
-        android:id="@+id/shareImageView"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:padding="4dp"
-        app:srcCompat="@drawable/ic_share_black_24dp"
-        app:layout_constraintStart_toEndOf="@id/likesTextView"
+        android:checkable="true"
+        app:icon="@drawable/ic_share_black_24dp"
+        app:iconTint="@color/colorBackground"
+        app:layout_constraintStart_toEndOf="@id/likesButton"
         app:layout_constraintTop_toTopOf="@id/bottomBarrier"
-        app:layout_constraintEnd_toStartOf="@id/shareTextView"
-        tools:srcCompat="@sample/postshare"/>
+        tools:text="@sample/posts.json/data/shareCount"
+        style="@style/ButtonStyle"/>
 
-    <TextView
-        android:id="@+id/shareTextView"
-        android:layout_width="0dp"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/viewsButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/shareImageView"
-        app:layout_constraintBottom_toBottomOf="@id/shareImageView"
-        app:layout_constraintStart_toEndOf="@+id/shareImageView"
-        tools:text="@sample/posts.json/data/shareCount[1]"/>
-
-    <ImageView
-        android:id="@+id/viewsImageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
-        app:srcCompat="@drawable/ic_remove_red_eye_black_24dp"
+        app:icon="@drawable/ic_remove_red_eye_black_24dp"
+        app:iconTint="@color/colorBackground"
         app:layout_constraintTop_toBottomOf="@id/bottomBarrier"
-        app:layout_constraintEnd_toStartOf="@id/viewsTextView"
-        tools:srcCompat="@sample/postviews"/>
-
-    <TextView
-        android:id="@+id/viewsTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/viewsImageView"
-        app:layout_constraintBottom_toBottomOf="@id/viewsImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="@sample/posts.json/data/viewsCount[1]"/>
+        tools:text="@sample/posts.json/data/viewsCount[1]"
+        style="@style/ButtonStyle"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

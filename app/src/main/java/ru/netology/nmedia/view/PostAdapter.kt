@@ -44,17 +44,16 @@ class PostViewHolder(
             authorTextView.text = post.author
             publishedTextView.text = post.published
             contentTextView.text = post.content
-            likesTextView.text = Util.parseNumber(post.likesCount)
-            shareTextView.text = Util.parseNumber(post.shareCount)
-            viewsTextView.text = Util.parseNumber(post.viewCount)
-            if (post.liked) likesImageView.setImageResource(R.drawable.ic_baseline_thumb_up_24)
-            else likesImageView.setImageResource(R.drawable.ic_thumb_up_black_24dp)
+            viewsButton.text = Util.parseNumber(post.viewCount)
+            likesButton.isChecked = post.liked
+            likesButton.text = Util.parseNumber(post.likesCount)
+            shareButton.text = Util.parseNumber(post.shareCount)
 
-            likesImageView.setOnClickListener {
+            likesButton.setOnClickListener {
                 onInteractionListener.onLike(post)
             }
 
-            shareImageView.setOnClickListener {
+            shareButton.setOnClickListener {
                 onInteractionListener.onShare(post)
             }
 
