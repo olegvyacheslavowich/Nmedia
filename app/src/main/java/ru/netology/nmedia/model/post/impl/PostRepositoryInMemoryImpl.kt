@@ -9,18 +9,6 @@ class PostRepositoryInMemoryImpl : PostRepository {
 
     private var currentId: Int = 1
 
-    private var post = Post(
-        0,
-        "Natali Karpenko",
-        "02 december 2020",
-        "Android is the most popular mobile platform, so there is a shortage of Android developers: more than 500 vacancies appear every month (according to hh.ru). \\n\\nAndroid developers are needed in different areas: to make online banking with a complex degree of protection or an application for search for a soul mate, develop applications for learning English or a mobile service for finding flights.",
-        false,
-        10_299_999,
-        false,
-        0,
-        44
-    )
-
     private var posts = listOf(
         Post(
             currentId++,
@@ -31,7 +19,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             299_999,
             false,
             3,
-            100_345
+            100_345,
+            "https://www.youtube.com/watch?v=RFimmzu8nTw"
         ),
         Post(
             currentId++,
@@ -42,7 +31,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             9_999,
             false,
             98,
-            67
+            67,
+            "https://www.youtube.com/watch?v=RFimmzu8nTw"
         ),
         Post(
             currentId++,
@@ -53,7 +43,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             87_299_999,
             false,
             7,
-            238
+            238,
+            "https://www.youtube.com/watch?v=RFimmzu8nTw"
         ),
 
         Post(
@@ -65,7 +56,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             1_243_399,
             false,
             7,
-            2_555_003
+            2_555_003,
+            "https://www.youtube.com/watch?v=RFimmzu8nTw"
         ),
 
         Post(
@@ -77,23 +69,14 @@ class PostRepositoryInMemoryImpl : PostRepository {
             1,
             true,
             7,
-            1
+            1,
+            "https://www.youtube.com/watch?v=RFimmzu8nTw"
         )
     )
 
-    private val data = MutableLiveData(post)
     private val dataPosts = MutableLiveData(posts)
 
-    override fun get(): LiveData<Post> = data
     override fun getAll(): LiveData<List<Post>> = dataPosts
-
-    override fun like() {
-        post = post.copy(
-            liked = !post.liked,
-            likesCount = if (!post.liked) post.likesCount + 1 else post.likesCount - 1
-        )
-        data.value = post
-    }
 
     override fun likeById(id: Int) {
         posts = posts.map {
@@ -103,11 +86,6 @@ class PostRepositoryInMemoryImpl : PostRepository {
             )
         }
         dataPosts.value = posts
-    }
-
-    override fun share() {
-        post = post.copy(shareCount = post.shareCount + 1)
-        data.value = post
     }
 
     override fun shareById(id: Int) {

@@ -16,6 +16,7 @@ interface OnInteractionListener {
     fun onShare(post: Post)
     fun onRemove(post: Post)
     fun onEdit(post: Post)
+    fun onPlay(post: Post)
 }
 
 class PostAdapter(private val onInteractionListener: OnInteractionListener) :
@@ -49,6 +50,7 @@ class PostViewHolder(
             likesButton.text = Util.parseNumber(post.likesCount)
             shareButton.text = Util.parseNumber(post.shareCount)
 
+
             likesButton.setOnClickListener {
                 onInteractionListener.onLike(post)
             }
@@ -75,6 +77,15 @@ class PostViewHolder(
                     }
                 }.show()
             }
+
+            playVideoImageView.setOnClickListener {
+                onInteractionListener.onPlay(post)
+            }
+
+            videoImageView.setOnClickListener {
+                onInteractionListener.onPlay(post)
+            }
+
 
         }
     }

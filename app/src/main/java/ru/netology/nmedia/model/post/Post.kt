@@ -9,7 +9,8 @@ data class Post(
     val likesCount: Int = 0,
     val shared: Boolean = false,
     val shareCount: Int = 0,
-    val viewCount: Int = 0
+    val viewCount: Int = 0,
+    val videoUrl: String
 )
 
 fun getEmptyPost(): Post {
@@ -22,7 +23,8 @@ fun getEmptyPost(): Post {
         0,
         false,
         0,
-        0
+        0,
+        "https://www.youtube.com/watch?v=RFimmzu8nTw"
     )
 }
 

@@ -8,4 +8,5 @@
     <string name="edit">Изменить</string>
     <string name="description_post_save">Сохранить</string>
     <string name="add">Добавить</string>
+    <string name="share_post">Текст поста</string>
 </resources>

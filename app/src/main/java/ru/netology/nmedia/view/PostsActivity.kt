@@ -2,6 +2,7 @@ package ru.netology.nmedia.view
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 class PostsActivity : AppCompatActivity() {
 
     private val requestCodeChangePost = 1
+    private val intentType = "text/plain"
 
     private val viewModel: PostViewModel by viewModels()
 
@@ -30,7 +32,16 @@ class PostsActivity : AppCompatActivity() {
             }
 
             override fun onShare(post: Post) {
-                viewModel.shareById(post.id)
+                val intent = Intent()
+                    .setAction(Intent.ACTION_SEND)
+                    .putExtra(Intent.EXTRA_TEXT, post.content)
+                    .setType(intentType)
+                val shareIntent = Intent.createChooser(intent, "Post content")
+
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(shareIntent)
+                    viewModel.shareById(post.id)
+                }
             }
 
             override fun onRemove(post: Post) {
@@ -42,6 +53,13 @@ class PostsActivity : AppCompatActivity() {
                 val intent = Intent(this@PostsActivity, PostActivity::class.java)
                 intent.putExtra(Intent.EXTRA_TEXT, post.content)
                 startActivityForResult(intent, requestCodeChangePost)
+            }
+
+            override fun onPlay(post: Post) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                }
             }
         })
 
