@@ -1,20 +1,20 @@
 package ru.netology.nmedia.view
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
-import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.ActivityPostsBinding
 import ru.netology.nmedia.model.post.Post
-import ru.netology.nmedia.util.Util
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class PostsActivity : AppCompatActivity() {
+
+    private val requestCodeChangePost = 1
+
+    private val viewModel: PostViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +39,9 @@ class PostsActivity : AppCompatActivity() {
 
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
+                val intent = Intent(this@PostsActivity, PostActivity::class.java)
+                intent.putExtra(Intent.EXTRA_TEXT, post.content)
+                startActivityForResult(intent, requestCodeChangePost)
             }
         })
 
@@ -57,41 +60,28 @@ class PostsActivity : AppCompatActivity() {
         binding.apply {
             postsRecyclerView.adapter = mergeAdapter
 
-            sendImageView.setOnClickListener {
-                with(currentPostContentEditText) {
-                    if (TextUtils.isEmpty(text)) {
-                        return@setOnClickListener
-                    }
-
-                    viewModel.changeContent(currentPostContentEditText.text.toString())
-                    viewModel.save()
-
-                    setText("")
-                    clearFocus()
-                    Util.hideKeyboard(this)
-                }
-            }
-
-            cancelImageView.setOnClickListener {
-                with(currentPostContentEditText) {
-                    setText("")
-                    clearFocus()
-                    Util.hideKeyboard(this)
-                }
+            postAddFab.setOnClickListener {
+                val intent = Intent(this@PostsActivity, PostActivity::class.java)
+                startActivityForResult(intent, requestCodeChangePost)
             }
         }
+    }
 
 
-        viewModel.edited.observe(this) { post ->
-            if (post.id == 0) {
-                return@observe
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            requestCodeChangePost -> {
+                if (resultCode != Activity.RESULT_OK) {
+                    return
+                }
+
+                data?.getStringExtra(Intent.EXTRA_TEXT)?.let {
+                    viewModel.changeContent(it)
+                    viewModel.save()
+                }
             }
-
-            with(binding.currentPostContentEditText) {
-                requestFocus()
-                setText(post.content)
-            }
-
         }
 
     }

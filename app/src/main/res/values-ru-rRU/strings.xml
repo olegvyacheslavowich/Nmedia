@@ -6,4 +6,6 @@
     <string name="ad_title">Реклама</string>
     <string name="remove">Удалить</string>
     <string name="edit">Изменить</string>
+    <string name="description_post_save">Сохранить</string>
+    <string name="add">Добавить</string>
 </resources>

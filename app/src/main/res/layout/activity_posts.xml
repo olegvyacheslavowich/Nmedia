@@ -11,58 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/current_post_content_edit_text"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/activity_post" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/bottom_barrier"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/post_add_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:barrierDirection="top"
-        app:constraint_referenced_ids="current_post_content_edit_text">
-    </androidx.constraintlayout.widget.Barrier>
-
-    <EditText
-        android:id="@+id/current_post_content_edit_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:inputType="textMultiLine"
-        android:importantForAutofill="no"
-        tools:text="@string/remove"
-        android:padding="16dp"
-        app:layout_constraintTop_toTopOf="@id/bottom_barrier"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/cancel_image_view"
-        android:background="@color/colorBackground"
-        android:textColor="@color/colorText"/>
-
-    <ImageView
-        android:id="@+id/cancel_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="2dp"
-        app:srcCompat="@drawable/ic_baseline_cancel_48"
-        android:background="@color/colorBackground"
-        app:layout_constraintEnd_toStartOf="@id/send_image_view"
-        app:layout_constraintTop_toBottomOf="@id/bottom_barrier"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/current_post_content_edit_text"/>
-
-    <ImageView
-        android:id="@+id/send_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorBackground"
-        app:srcCompat="@drawable/ic_baseline_send_48"
-        android:padding="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bottom_barrier"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cancel_image_view"/>
-
-
+        app:srcCompat="@drawable/ic_baseline_add_24"
+        android:contentDescription="@string/add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
