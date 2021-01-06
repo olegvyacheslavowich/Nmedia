@@ -1,12 +1,15 @@
 package ru.netology.nmedia.view
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.databinding.ActivityPostsBinding
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
@@ -33,9 +36,9 @@ class PostsActivity : AppCompatActivity() {
 
             override fun onShare(post: Post) {
                 val intent = Intent()
-                    .setAction(Intent.ACTION_SEND)
-                    .putExtra(Intent.EXTRA_TEXT, post.content)
-                    .setType(intentType)
+                        .setAction(Intent.ACTION_SEND)
+                        .putExtra(Intent.EXTRA_TEXT, post.content)
+                        .setType(intentType)
                 val shareIntent = Intent.createChooser(intent, "Post content")
 
                 if (intent.resolveActivity(packageManager) != null) {
@@ -84,7 +87,6 @@ class PostsActivity : AppCompatActivity() {
             }
         }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
