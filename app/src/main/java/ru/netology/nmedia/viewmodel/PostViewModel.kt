@@ -3,18 +3,15 @@ package ru.netology.nmedia.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import ru.netology.nmedia.model.ad.impl.AdRepositoryInMemoryImpl
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.model.post.PostRepository
 import ru.netology.nmedia.model.post.getEmptyPost
-import ru.netology.nmedia.model.post.impl.PostRepositoryInFile
-import ru.netology.nmedia.model.post.impl.PostRepositoryInMemoryImpl
-import ru.netology.nmedia.model.post.impl.PostRepositoryInSharedPreferences
+import ru.netology.nmedia.model.post.impl.PostRepositoryInFileImpl
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: PostRepository = PostRepositoryInFile(application)
+    private val repository: PostRepository = PostRepositoryInFileImpl(application)
     private val adRepository = AdRepositoryInMemoryImpl()
     val dataList = repository.getAll()
     val adData = adRepository.getAll()
