@@ -1,6 +1,10 @@
 package ru.netology.nmedia.model.post
 
-data class Post(
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class Post (
     val id: Int,
     val author: String,
     val published: String,
@@ -11,7 +15,7 @@ data class Post(
     val shareCount: Int = 0,
     val viewCount: Int = 0,
     val videoUrl: String
-)
+) : Parcelable
 
 fun getEmptyPost(): Post {
     return Post(

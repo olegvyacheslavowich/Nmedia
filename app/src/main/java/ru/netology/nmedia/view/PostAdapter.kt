@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
-import ru.netology.nmedia.databinding.ActivityPostBinding
+import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.util.Util
 
 interface OnInteractionListener {
+    fun onClicked(post: Post)
     fun onLike(post: Post)
     fun onShare(post: Post)
     fun onRemove(post: Post)
@@ -24,7 +25,7 @@ class PostAdapter(private val onInteractionListener: OnInteractionListener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding =
-            ActivityPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return PostViewHolder(binding, onInteractionListener)
     }
@@ -36,7 +37,7 @@ class PostAdapter(private val onInteractionListener: OnInteractionListener) :
 
 
 class PostViewHolder(
-    private val binding: ActivityPostBinding,
+    private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -50,6 +51,10 @@ class PostViewHolder(
             likesButton.text = Util.parseNumber(post.likesCount)
             shareButton.text = Util.parseNumber(post.shareCount)
 
+
+            root.setOnClickListener {
+                onInteractionListener.onClicked(post)
+            }
 
             likesButton.setOnClickListener {
                 onInteractionListener.onLike(post)

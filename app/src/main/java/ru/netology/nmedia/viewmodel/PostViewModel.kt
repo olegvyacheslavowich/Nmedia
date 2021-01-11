@@ -15,17 +15,25 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val adRepository = AdRepositoryInMemoryImpl()
     val dataList = repository.getAll()
     val adData = adRepository.getAll()
+    var postData = MutableLiveData(getEmptyPost())
     val edited = MutableLiveData(getEmptyPost())
 
-    fun likeById(id: Int) = repository.likeById(id)
+    fun likeById(id: Int) {
+        repository.likeById(id)
+        postData.value = repository.getById(id)
+    }
 
-    fun shareById(id: Int) = repository.shareById(id)
+    fun shareById(id: Int) {
+        repository.shareById(id)
+        postData.value = repository.getById(id)
+    }
 
     fun removeById(id: Int) = repository.removeById(id)
 
     fun save() {
         edited.value?.let {
             repository.save(it)
+            setPostData(it)
         }
         edited.value = getEmptyPost()
     }
@@ -42,5 +50,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun edit(post: Post) {
         edited.value = post
+    }
+
+    fun setPostData(post: Post) {
+        postData.value = post
     }
 }

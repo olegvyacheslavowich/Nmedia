@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.netology.nmedia.databinding.ActivityAdBinding
+import ru.netology.nmedia.databinding.CardAdBinding
 import ru.netology.nmedia.model.ad.Ad
 
 class AdAdapter : ListAdapter<Ad, AdViewHolder>(AdDiffItemCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdViewHolder {
-        val binding = ActivityAdBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = CardAdBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AdViewHolder(binding)
     }
 
@@ -20,7 +20,7 @@ class AdAdapter : ListAdapter<Ad, AdViewHolder>(AdDiffItemCallBack()) {
     }
 }
 
-class AdViewHolder(private val binding: ActivityAdBinding) : RecyclerView.ViewHolder(binding.root) {
+class AdViewHolder(private val binding: CardAdBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(ad: Ad) {
 

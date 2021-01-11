@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.model.post.PostRepository
 
-class PostRepositoryInSharedPreferencesImpl(private val context: Context) : PostRepository {
+class PostRepositoryInSharedPreferencesImpl(context: Context) : PostRepository {
 
     private val sharedPrefNamePosts = "postsRep"
     private val keyPosts = "posts"
@@ -29,6 +29,10 @@ class PostRepositoryInSharedPreferencesImpl(private val context: Context) : Post
     private val dataPosts = MutableLiveData(posts)
 
     override fun getAll(): LiveData<List<Post>> = dataPosts
+
+    override fun getById(id: Int): Post? {
+        TODO("Not yet implemented")
+    }
 
     override fun likeById(id: Int) {
         posts = posts.map {

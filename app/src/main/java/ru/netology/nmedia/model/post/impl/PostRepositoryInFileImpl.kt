@@ -38,6 +38,8 @@ class PostRepositoryInFileImpl(private val context: Context) : PostRepository {
 
     override fun getAll(): LiveData<List<Post>> = dataPosts
 
+    override fun getById(id: Int): Post? = posts.filter { it.id == id }.firstOrNull()
+
     override fun likeById(id: Int) {
         posts = posts.map {
             if (it.id != id) it else it.copy(
