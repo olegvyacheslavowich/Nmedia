@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostsBinding
 import ru.netology.nmedia.model.post.Post
+import ru.netology.nmedia.util.NewPostArg
 import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.viewmodel.PostViewModel
 
@@ -21,6 +22,7 @@ class PostsFragment : Fragment() {
     companion object {
         const val intentType = "text/plain"
         var Bundle.textArg: String? by StringArg
+        var Bundle.newPostArg: Boolean by NewPostArg
     }
 
     private val viewModel: PostViewModel by viewModels(::requireParentFragment)
@@ -93,7 +95,10 @@ class PostsFragment : Fragment() {
             postsRecyclerView.adapter = mergeAdapter
 
             postAddFab.setOnClickListener {
-                findNavController().navigate(R.id.action_postsFragment_to_postFragment)
+                findNavController().navigate(R.id.action_postsFragment_to_postFragment,
+                    Bundle().apply {
+                        newPostArg = true
+                    })
             }
         }
 
