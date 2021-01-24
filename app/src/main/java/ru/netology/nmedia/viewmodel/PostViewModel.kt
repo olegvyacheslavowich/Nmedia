@@ -3,20 +3,34 @@ package ru.netology.nmedia.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.model.ad.impl.AdRepositoryInMemoryImpl
+import ru.netology.nmedia.model.draftcontent.impl.DraftContentRepositorySqlImpl
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.model.post.PostRepository
 import ru.netology.nmedia.model.post.getEmptyPost
 import ru.netology.nmedia.model.post.impl.PostRepositoryInFileImpl
+import ru.netology.nmedia.model.post.impl.PostRepositorySqlImpl
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: PostRepository = PostRepositoryInFileImpl(application)
+    private val repository: PostRepository = PostRepositorySqlImpl(
+        AppDb.getInstance(application).postDao
+    )
+    private val draftContentRepository = DraftContentRepositorySqlImpl(
+        AppDb.getInstance(application).draftContentDao
+    )
+
     private val adRepository = AdRepositoryInMemoryImpl()
     val dataList = repository.getAll()
     val adData = adRepository.getAll()
     var postData = MutableLiveData(getEmptyPost())
     val edited = MutableLiveData(getEmptyPost())
+    var draftContent: String
+        get() = draftContentRepository.get()
+        set(value) {
+            draftContentRepository.update(value)
+        }
 
     fun likeById(id: Int) {
         repository.likeById(id)
@@ -55,4 +69,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun setPostData(post: Post) {
         postData.value = post
     }
+
+    fun deleteDraftContent() = draftContentRepository.remove()
 }

@@ -67,12 +67,10 @@ class PostCardFragment : Fragment() {
                                 R.id.remove -> {
                                     viewModel.removeById(post.id)
                                    findNavController().navigateUp()
-                                    // findNavController().navigate(R.id.action_postsFragment_to_postCardFragment)
                                     true
                                 }
                                 R.id.edit -> {
                                     viewModel.edit(post)
-
                                     findNavController().navigate(R.id.action_postCardFragment_to_postFragment,
                                         Bundle().apply {
                                             textArg = post.content
