@@ -9,16 +9,15 @@ import ru.netology.nmedia.model.draftcontent.impl.DraftContentRepositorySqlImpl
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.model.post.PostRepository
 import ru.netology.nmedia.model.post.getEmptyPost
-import ru.netology.nmedia.model.post.impl.PostRepositoryInFileImpl
 import ru.netology.nmedia.model.post.impl.PostRepositorySqlImpl
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: PostRepository = PostRepositorySqlImpl(
-        AppDb.getInstance(application).postDao
+        AppDb.getInstance(application).postDao()
     )
     private val draftContentRepository = DraftContentRepositorySqlImpl(
-        AppDb.getInstance(application).draftContentDao
+        AppDb.getInstance(application).draftContentDao()
     )
 
     private val adRepository = AdRepositoryInMemoryImpl()
