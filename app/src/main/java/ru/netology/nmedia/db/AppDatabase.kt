@@ -10,7 +10,7 @@ import ru.netology.nmedia.db.entity.DraftContentEntity
 import ru.netology.nmedia.db.entity.PostEntity
 
 @Database(entities = [PostEntity::class, DraftContentEntity::class], version = 1)
-abstract class AppDb : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun postDao(): PostDao
     abstract fun draftContentDao(): DraftContentDao
@@ -19,17 +19,17 @@ abstract class AppDb : RoomDatabase() {
         private const val dbName = "app.db"
 
         @Volatile
-        private var instance: AppDb? = null
+        private var instance: AppDatabase? = null
 
-        fun getInstance(context: Context): AppDb {
+        fun getInstance(context: Context): AppDatabase {
             return instance ?: synchronized(this) {
                 instance ?: buildDatabase(context).also { instance = it }
             }
         }
 
         private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(context, AppDb::class.java, dbName)
-                .allowMainThreadQueries()
-                .build()
+            Room.databaseBuilder(context, AppDatabase::class.java, dbName)
+                .allowMainThreadQueries().
+                build()
     }
 }

@@ -4,23 +4,24 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import ru.netology.nmedia.db.entity.DraftContentEntity
 
 @Dao
 interface DraftContentDao {
 
     @Insert
-    fun save(content: String)
+    fun save(draftContentEntity: DraftContentEntity)
 
-    @Delete
-    fun remove()
+    @Query("DELETE FROM draft_content")
+    fun removeAll()
 
 
-    fun update(content: String) {
-        remove()
-        save(content)
+    fun update(draftContentEntity: DraftContentEntity) {
+        removeAll()
+        save(draftContentEntity)
     }
 
-    @Query("SELECT text FROM DraftContentEntity")
-    fun get(): String
+    @Query("SELECT text FROM draft_content")
+    fun get(): DraftContentEntity
 
 }

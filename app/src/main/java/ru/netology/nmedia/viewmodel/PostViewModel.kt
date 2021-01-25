@@ -3,7 +3,7 @@ package ru.netology.nmedia.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import ru.netology.nmedia.db.AppDb
+import ru.netology.nmedia.db.AppDatabase
 import ru.netology.nmedia.model.ad.impl.AdRepositoryInMemoryImpl
 import ru.netology.nmedia.model.draftcontent.impl.DraftContentRepositorySqlImpl
 import ru.netology.nmedia.model.post.Post
@@ -14,10 +14,10 @@ import ru.netology.nmedia.model.post.impl.PostRepositorySqlImpl
 class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: PostRepository = PostRepositorySqlImpl(
-        AppDb.getInstance(application).postDao()
+        AppDatabase.getInstance(application).postDao()
     )
     private val draftContentRepository = DraftContentRepositorySqlImpl(
-        AppDb.getInstance(application).draftContentDao()
+        AppDatabase.getInstance(application).draftContentDao()
     )
 
     private val adRepository = AdRepositoryInMemoryImpl()

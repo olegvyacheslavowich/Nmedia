@@ -14,7 +14,6 @@ class PostRepositorySqlImpl(private val postDao: PostDao) : PostRepository {
     val data = MutableLiveData(posts)
 
     init {
-        //posts = postDao.getAll().value
         data.value = posts
     }
 
