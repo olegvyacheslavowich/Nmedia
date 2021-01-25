@@ -1,5 +1,6 @@
 package ru.netology.nmedia.db.dao.draftcontent
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -22,6 +23,6 @@ interface DraftContentDao {
     }
 
     @Query("SELECT text FROM draft_content")
-    fun get(): DraftContentEntity
+    fun get(): LiveData<DraftContentEntity>
 
 }

@@ -12,11 +12,7 @@ data class DraftContentEntity(
         fun fromDto(text: String) = DraftContentEntity(text)
 
         fun toDto(draftContentEntity: DraftContentEntity): String {
-            if (draftContentEntity == null) {
-                 return ""
-            } else {
-                return draftContentEntity.text
-            }
+            return draftContentEntity.text
         }
     }
 }

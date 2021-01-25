@@ -2,6 +2,7 @@ package ru.netology.nmedia.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nmedia.db.AppDatabase
 import ru.netology.nmedia.model.ad.impl.AdRepositoryInMemoryImpl
@@ -25,11 +26,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val adData = adRepository.getAll()
     var postData = MutableLiveData(getEmptyPost())
     val edited = MutableLiveData(getEmptyPost())
-    var draftContent: String
-        get() = draftContentRepository.get()
-        set(value) {
-            draftContentRepository.update(value)
-        }
+    var draftContent: LiveData<String> = draftContentRepository.get()
 
     fun likeById(id: Int) {
         repository.likeById(id)
@@ -68,6 +65,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun setPostData(post: Post) {
         postData.value = post
     }
+
+    fun saveDraftContent(content: String) = draftContentRepository.update(content)
 
     fun deleteDraftContent() = draftContentRepository.remove()
 }
