@@ -30,8 +30,10 @@ class PostFragment : Fragment() {
         setContent(binding.postTextEditText)
         val isNewPost = arguments?.newPostArg == true
 
-        if (isNewPost) {
-            binding.postTextEditText.setText(viewModel.draftContent)
+        viewModel.draftContent.observe(viewLifecycleOwner) {
+            if (isNewPost) {
+                binding.postTextEditText.setText(it)
+            }
         }
 
         binding.postTextEditText.requestFocus()
@@ -48,7 +50,7 @@ class PostFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (isNewPost) {
                 val content = binding.postTextEditText.text.toString()
-                viewModel.draftContent = content
+                viewModel.saveDraftContent(content)
             }
             findNavController().navigateUp()
         }

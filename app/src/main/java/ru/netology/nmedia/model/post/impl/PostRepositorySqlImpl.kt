@@ -2,7 +2,9 @@ package ru.netology.nmedia.model.post.impl
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import ru.netology.nmedia.db.dao.post.PostDao
+import ru.netology.nmedia.db.entity.PostEntity
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.model.post.PostRepository
 
@@ -12,11 +14,25 @@ class PostRepositorySqlImpl(private val postDao: PostDao) : PostRepository {
     val data = MutableLiveData(posts)
 
     init {
-        posts = postDao.getAll()
         data.value = posts
     }
 
-    override fun getAll(): LiveData<List<Post>> = data
+    override fun getAll(): LiveData<List<Post>> = Transformations.map(postDao.getAll()) { list ->
+        list.map {
+            Post(
+                it.id,
+                it.author,
+                it.published,
+                it.content,
+                it.liked,
+                it.likesCount,
+                it.shared,
+                it.shareCount,
+                it.viewCount,
+                it.videoUrl
+            )
+        }
+    }
 
     override fun getById(id: Int): Post? = posts.filter { it.id == id }.firstOrNull()
 
@@ -35,7 +51,7 @@ class PostRepositorySqlImpl(private val postDao: PostDao) : PostRepository {
         postDao.shareById(id)
         posts = posts.map {
             if (it.id == id) {
-                it.copy(shared = 1==1, shareCount = it.shareCount + 1)
+                it.copy(shared = 1 == 1, shareCount = it.shareCount + 1)
             } else {
                 it
             }
@@ -50,17 +66,8 @@ class PostRepositorySqlImpl(private val postDao: PostDao) : PostRepository {
     }
 
     override fun save(post: Post) {
-
-        val id = post.id
-        val savedPost = postDao.save(post)
-        posts = if (post.id == 0) {
-            listOf(savedPost) + posts
-        } else {
-            posts.map {
-                if (it.id == id) savedPost else it
-            }
-        }
-
-        data.value = posts
+        postDao.save(PostEntity.fromDto(post))
     }
+
+
 }
