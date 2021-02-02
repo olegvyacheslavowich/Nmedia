@@ -3,6 +3,7 @@ package ru.netology.nmedia.model.post.impl
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.netology.nmedia.model.post.Post
@@ -38,7 +39,10 @@ class PostRepositoryInFileImpl(private val context: Context) : PostRepository {
 
     override fun getAll(): LiveData<List<Post>> = dataPosts
 
-    override fun getById(id: Int): Post? = posts.filter { it.id == id }.firstOrNull()
+    override fun getById(id: Int): LiveData<Post> {
+        return liveData<Post> {  }
+    }
+
 
     override fun likeById(id: Int) {
         posts = posts.map {

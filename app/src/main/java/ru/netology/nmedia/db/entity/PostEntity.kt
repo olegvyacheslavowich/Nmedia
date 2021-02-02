@@ -35,5 +35,21 @@ data class PostEntity(
             )
 
         }
+
+        fun toDto(post: PostEntity) =
+            Post(
+                post.id,
+                post.author,
+                post.published,
+                post.content,
+                post.liked,
+                post.likesCount,
+                post.shared,
+                post.shareCount,
+                post.viewCount,
+                post.videoUrl
+            )
+
     }
 }
+

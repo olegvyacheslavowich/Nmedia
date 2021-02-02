@@ -12,6 +12,9 @@ interface PostDao {
     @Query("SELECT * FROM posts ORDER BY id DESC")
     fun getAll(): LiveData<List<PostEntity>>
 
+    @Query("SELECT * FROM posts WHERE id = :id")
+    fun  getById(id: Int) : LiveData<PostEntity>
+
     @Insert
     fun insert(post: PostEntity)
 

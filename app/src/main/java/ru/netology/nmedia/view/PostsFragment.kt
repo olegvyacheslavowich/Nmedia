@@ -37,7 +37,7 @@ class PostsFragment : Fragment() {
 
         val postAdapter = PostAdapter(object : OnInteractionListener {
             override fun onClicked(post: Post) {
-                viewModel.setPostData(post)
+                viewModel.getById(post.id)
                 findNavController().navigate(R.id.action_postsFragment_to_postCardFragment)
             }
 

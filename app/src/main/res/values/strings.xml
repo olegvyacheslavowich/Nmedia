@@ -8,4 +8,10 @@
     <string name="description_post_save">Save</string>
     <string name="add">Add</string>
     <string name="share_post">Post contetnt</string>
+    <string name="like_channel">Likes</string>
+    <string name="like_channel_descriprion_text">Channel for like notifications</string>
+    <string name="user_liked_notification">User %1$s liked post from %2$s</string>
+    <string name="new_post_notification">%1$s published new post</string>
+    <string name="new_post_channel">New post</string>
+    <string name="new_post_channel_description">Channel for new posts notification</string>
 </resources>

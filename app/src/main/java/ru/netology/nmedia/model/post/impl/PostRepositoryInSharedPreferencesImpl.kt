@@ -30,7 +30,7 @@ class PostRepositoryInSharedPreferencesImpl(context: Context) : PostRepository {
 
     override fun getAll(): LiveData<List<Post>> = dataPosts
 
-    override fun getById(id: Int): Post? {
+    override fun getById(id: Int): LiveData<Post> {
         TODO("Not yet implemented")
     }
 
