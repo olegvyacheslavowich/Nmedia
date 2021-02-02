@@ -9,4 +9,10 @@
     <string name="description_post_save">Сохранить</string>
     <string name="add">Добавить</string>
     <string name="share_post">Текст поста</string>
+    <string name="like_channel">Лайки</string>
+    <string name="like_channel_descriprion_text">Канал для оповещений о лайках</string>
+    <string name="user_liked_notification">Пользователь %1$s поставил лайка на пост автора %2$s</string>
+    <string name="new_post_notification">Пользователь %1$s разместил новый пост</string>
+    <string name="new_post_channel">Новый пост</string>
+    <string name="new_post_channel_description">Канал для оповещения о новых постах</string>
 </resources>
