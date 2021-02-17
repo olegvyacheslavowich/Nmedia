@@ -9,7 +9,6 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.databinding.FragmentPostChangeBinding
 import ru.netology.nmedia.util.Util
 import ru.netology.nmedia.view.PostsFragment.Companion.newPostArg

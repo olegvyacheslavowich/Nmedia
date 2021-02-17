@@ -9,14 +9,14 @@ data class PostEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val author: String,
-    val published: String,
+    val published: Long,
     val content: String,
     val liked: Boolean,
     val likesCount: Int,
     val shared: Boolean,
     val shareCount: Int,
     val viewCount: Int,
-    val videoUrl: String
+    val videoUrl: Int
 ) {
     companion object {
 
@@ -42,12 +42,12 @@ data class PostEntity(
                 post.author,
                 post.published,
                 post.content,
+                post.videoUrl,
                 post.liked,
                 post.likesCount,
                 post.shared,
                 post.shareCount,
-                post.viewCount,
-                post.videoUrl
+                post.viewCount
             )
 
     }

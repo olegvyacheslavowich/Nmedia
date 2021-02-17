@@ -4,6 +4,8 @@ import android.app.Activity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import java.math.BigDecimal
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 object Util {
@@ -36,6 +38,12 @@ object Util {
         val imm: InputMethodManager =
             view.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    fun Long.timeToString(): String {
+        val date = Date(this)
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        return format.format(date)
     }
 
 }

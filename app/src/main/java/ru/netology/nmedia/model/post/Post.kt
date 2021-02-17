@@ -1,34 +1,36 @@
 package ru.netology.nmedia.model.post
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
+
 
 @Parcelize
 data class Post (
     val id: Int,
     val author: String,
-    val published: String,
+    val published: Long,
     val content: String,
+    val videoUrl: Int = 0,
     val liked: Boolean = false,
     val likesCount: Int = 0,
     val shared: Boolean = false,
     val shareCount: Int = 0,
-    val viewCount: Int = 0,
-    val videoUrl: String
+    val viewCount: Int = 0
 ) : Parcelable
 
 fun getEmptyPost(): Post {
     return Post(
         0,
         "Me",
-        "Now",
+        1613415363,
         "",
-        false,
+        //"https://www.youtube.com/watch?v=RFimmzu8nTw",
         0,
         false,
         0,
+        false,
         0,
-        "https://www.youtube.com/watch?v=RFimmzu8nTw"
+        0
     )
 }
 

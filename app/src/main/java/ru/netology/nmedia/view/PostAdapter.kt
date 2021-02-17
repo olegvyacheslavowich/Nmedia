@@ -10,6 +10,7 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.util.Util
+import ru.netology.nmedia.util.Util.timeToString
 
 interface OnInteractionListener {
     fun onClicked(post: Post)
@@ -44,7 +45,7 @@ class PostViewHolder(
     fun bind(post: Post) {
         binding.apply {
             authorTextView.text = post.author
-            publishedTextView.text = post.published
+            publishedTextView.text = post.published.timeToString()
             contentTextView.text = post.content
             viewsButton.text = Util.parseNumber(post.viewCount)
             likesButton.isChecked = post.liked
