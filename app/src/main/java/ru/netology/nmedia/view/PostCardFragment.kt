@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.util.Util
+import ru.netology.nmedia.util.Util.timeToString
 import ru.netology.nmedia.view.PostsFragment.Companion.textArg
 import ru.netology.nmedia.viewmodel.PostViewModel
 
@@ -35,7 +36,7 @@ class PostCardFragment : Fragment() {
         viewModel.postData.observe(viewLifecycleOwner, { post ->
             binding.apply {
                 authorTextView.text = post.author
-                publishedTextView.text = post.published
+                publishedTextView.text = post.published.timeToString()
                 contentTextView.text = post.content
                 viewsButton.text = Util.parseNumber(post.viewCount)
                 likesButton.isChecked = post.liked
@@ -84,14 +85,14 @@ class PostCardFragment : Fragment() {
                 }
 
                 playVideoImageView.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("post.videoUrl"))
                     if (context?.let { intent.resolveActivity(it.packageManager) } != null) {
                         startActivity(intent)
                     }
                 }
 
                 videoImageView.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("post.videoUrl"))
                     if (context?.let { intent.resolveActivity(it.packageManager) } != null) {
                         startActivity(intent)
                     }

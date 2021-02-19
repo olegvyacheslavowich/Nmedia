@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -34,6 +35,11 @@ class PostsFragment : Fragment() {
     ): View {
 
         val binding = FragmentPostsBinding.inflate(inflater, container, false)
+        binding.swipeRefresh.setOnRefreshListener {
+            binding.swipeRefresh.isRefreshing = true;
+            viewModel.loadPosts()
+            binding.swipeRefresh.isRefreshing = false;
+        }
 
         val postAdapter = PostAdapter(object : OnInteractionListener {
             override fun onClicked(post: Post) {
@@ -72,15 +78,22 @@ class PostsFragment : Fragment() {
             }
 
             override fun onPlay(post: Post) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("post.videoUrl"))
                 if (context?.let { intent.resolveActivity(it.packageManager) } != null) {
                     startActivity(intent)
                 }
             }
         })
 
-        viewModel.dataList.observe(viewLifecycleOwner) {
-            postAdapter.submitList(it)
+        viewModel.dataList.observe(viewLifecycleOwner) { state ->
+            postAdapter.submitList(state.posts)
+            binding.progressBar.isVisible = state.loading
+            binding.errorGroup.isVisible = state.error
+            binding.emptyText.isVisible = state.empty
+        }
+
+        binding.retryButton.setOnClickListener {
+            viewModel.loadPosts()
         }
 
         val adAdapter = AdAdapter()
