@@ -2,12 +2,12 @@ package ru.netology.nmedia.model.post.impl
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.model.post.PostRepository
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class PostRepositoryHttpImpl : PostRepository {
@@ -25,59 +25,120 @@ class PostRepositoryHttpImpl : PostRepository {
     }
 
 
-    override fun getAll(): List<Post> {
+    override fun getAll(callback: PostRepository.GetAllCallback) {
         val request: Request = Request.Builder()
             .url("${BASE_URL}/api/posts")
             .build()
-        return client.newCall(request)
-            .execute()
-            .let { it.body?.string() ?: throw RuntimeException("body is null") }
-            .let { gson.fromJson(it, typeToken.type) }
+        return client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                callback.onError(e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string() ?: throw RuntimeException("body is null")
+                try {
+                    callback.onSuccess(gson.fromJson(body, typeToken.type))
+                } catch (e: IOException) {
+                    callback.onError(e)
+                }
+            }
+
+        })
     }
 
-    override fun getById(id: Int): Post {
+    override fun getById(id: Int, callback: PostRepository.GetByIdCallback) {
         val request: Request = Request.Builder()
             .url("${BASE_URL}/api/posts/${id}")
             .build()
-        return client.newCall(request)
-            .execute()
-            .let { it.body?.string() ?: throw RuntimeException("Post with ${id} not found") }
-            .let { gson.fromJson(it, typeTokenPost.type) }
+        return client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                callback.onError(e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val body =
+                    response.body?.string() ?: throw RuntimeException("Post with ${id} not found")
+                try {
+                    callback.onSuccess(gson.fromJson(body, typeTokenPost.type))
+                } catch (e: Exception) {
+                    callback.onError(e)
+                }
+            }
+        })
     }
 
-    override fun likeById(id: Int) {
+    override fun likeById(id: Int, callback: PostRepository.GeneralCallback) {
         val request: Request = Request.Builder()
             .url("${BASE_URL}/api/posts/${id}/likes")
             .post("".toRequestBody(jsonType))
             .build()
         client.newCall(request)
-            .execute()
-            .let { if (it.code > 400) throw java.lang.RuntimeException(it.body.toString()) }
+            .enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError(e)
+                }
 
+                override fun onResponse(call: Call, response: Response) {
+                    try {
+                        if (response.code > 400)
+                            throw java.lang.RuntimeException(response.body.toString())
+                        callback.onSuccess()
+                    } catch (e: Exception) {
+                        callback.onError(e)
+                    }
+                }
+            })
 
     }
 
     override fun shareById(id: Int) {
     }
 
-    override fun removeById(id: Int) {
+    override fun removeById(id: Int, callback: PostRepository.GeneralCallback) {
         val request: Request = Request.Builder()
             .url("${BASE_URL}/api/posts/${id}")
             .delete()
             .build()
         client.newCall(request)
-            .execute()
-            .let { if (it.code > 400) throw java.lang.RuntimeException(it.body.toString()) }
+            .enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    try {
+                        if (response.code > 400)
+                            throw java.lang.RuntimeException(response.body.toString())
+                        callback.onSuccess()
+                    } catch (e: Exception) {
+                        callback.onError(e)
+                    }
+                }
+            })
     }
 
-    override fun save(post: Post)  {
+    override fun save(post: Post, callback: PostRepository.GeneralCallback) {
         val request: Request = Request.Builder()
             .url("${BASE_URL}/api/posts")
             .post(gson.toJson(post).toRequestBody(jsonType))
             .build()
         return client.newCall(request)
-            .execute()
-            .let { if (it.code > 400) throw java.lang.RuntimeException(it.body.toString()) }
+            .enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    try {
+                        if (response.code > 400)
+                            throw java.lang.RuntimeException(response.body.toString())
+                        callback.onSuccess()
+                    } catch (e: Exception) {
+                        callback.onError(e)
+                    }
+                }
+
+            })
     }
 
 }
