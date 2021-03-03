@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
 import ru.netology.nmedia.db.AppDatabase
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.ad.impl.AdRepositoryInMemoryImpl
@@ -26,6 +25,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val adRepository = AdRepositoryInMemoryImpl()
     val dataList = MutableLiveData<FeedModel>()
 
+    val error = MutableLiveData<String>()
     val adData = adRepository.getAll()
     var postData = MutableLiveData(getEmptyPost())
     val edited = MutableLiveData(getEmptyPost())
@@ -36,16 +36,20 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getById(id: Int) {
-        thread {
-            postData.postValue(repository.getById(id))
-        }
+        repository.getById(id, object : PostRepository.GetByIdCallback {
+            override fun onSuccess(post: Post) {
+                postData.postValue(post)
+            }
 
+            override fun onError(e: Exception) {
+                postData.postValue(getEmptyPost())
+            }
+        })
     }
 
     fun likeById(id: Int) {
-        thread {
-            try {
-                repository.likeById(id)
+        repository.likeById(id, object : PostRepository.GeneralCallback {
+            override fun onSuccess() {
                 dataList.value?.let {
                     it.posts.map { post ->
                         if (post.id == id) {
@@ -67,10 +71,13 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                     })
                 }
                 postData.postValue(dataList.value?.posts?.filter { it.id == id }?.first())
-            } catch (e: IOException) {
+            }
+
+            override fun onError(e: Exception) {
                 dataList.postValue(dataList.value?.copy(error = true))
             }
-        }
+
+        })
     }
 
     fun shareById(id: Int) {
@@ -78,30 +85,40 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun removeById(id: Int) {
-        thread {
-            try {
-                repository.removeById(id)
-                dataList.value?.posts
-                    ?.filter { it.id != id }
-                    .apply {
-                        dataList.postValue(
-                            this?.let {
-                                FeedModel(posts = it, it.isEmpty())
-                            })
-                    }
-            } catch (e: IOException) {
-                dataList.value = dataList.value?.copy()
+        repository.removeById(id, object : PostRepository.GeneralCallback {
+            override fun onSuccess() {
+                try {
+                    dataList.value?.posts
+                        ?.filter { it.id != id }
+                        .apply {
+                            dataList.postValue(
+                                this?.let {
+                                    FeedModel(posts = it, it.isEmpty())
+                                })
+                        }
+                } catch (e: IOException) {
+                    dataList.postValue(FeedModel(error = true))
+                }
             }
-        }
+
+            override fun onError(e: Exception) {
+                dataList.postValue(FeedModel(error = true))
+            }
+        })
     }
 
     fun save() {
-        thread {
-            edited.value?.let {
-                repository.save(it)
-                loadPosts()
-            }
-            edited.postValue(getEmptyPost())
+        edited.value?.let {
+            repository.save(it, object : PostRepository.GeneralCallback {
+                override fun onSuccess() {
+                    loadPosts()
+                    edited.postValue(getEmptyPost())
+                }
+
+                override fun onError(e: Exception) {
+                    error.postValue(e.toString())
+                }
+            })
         }
     }
 
@@ -124,16 +141,18 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteDraftContent() = draftContentRepository.remove()
 
     fun loadPosts() {
-        thread {
-            dataList.postValue(FeedModel(loading = true))
-            try {
-                val posts = repository.getAll()
-                FeedModel(posts, empty = posts.isEmpty())
-            } catch (e: IOException) {
-                FeedModel(error = true)
-            }.also {
-                dataList.postValue(it)
+
+        dataList.postValue(FeedModel(loading = true))
+        repository.getAll(object : PostRepository.GetAllCallback {
+            override fun onSuccess(posts: List<Post>) {
+                FeedModel(posts, empty = posts.isEmpty()).let {
+                    dataList.postValue(it)
+                }
             }
-        }
+
+            override fun onError(e: Exception) {
+                FeedModel(error = true)
+            }
+        })
     }
 }
