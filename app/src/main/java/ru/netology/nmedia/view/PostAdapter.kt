@@ -6,11 +6,13 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.util.Util
 import ru.netology.nmedia.util.Util.timeToString
+import ru.netology.nmedia.util.loadImg
 
 interface OnInteractionListener {
     fun onClicked(post: Post)
@@ -44,6 +46,8 @@ class PostViewHolder(
 
     fun bind(post: Post) {
         binding.apply {
+
+            authorImageView.loadImg("http://1.1.1.1:9194/avatars/", post.authorAvatar)
             authorTextView.text = post.author
             publishedTextView.text = post.published.timeToString()
             contentTextView.text = post.content
@@ -51,7 +55,10 @@ class PostViewHolder(
             likesButton.isChecked = post.liked
             likesButton.text = Util.parseNumber(post.likesCount)
             shareButton.text = Util.parseNumber(post.shareCount)
-
+            attachmentImageView.loadImg(
+                "http://1.1.1.1:9194/images/",
+                post.attachment?.url ?: ""
+            )
 
             root.setOnClickListener {
                 onInteractionListener.onClicked(post)
@@ -88,7 +95,7 @@ class PostViewHolder(
                 onInteractionListener.onPlay(post)
             }
 
-            videoImageView.setOnClickListener {
+            attachmentImageView.setOnClickListener {
                 onInteractionListener.onPlay(post)
             }
 

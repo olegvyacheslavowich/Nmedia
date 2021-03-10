@@ -3,6 +3,9 @@ package ru.netology.nmedia.util
 import android.app.Activity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import ru.netology.nmedia.R
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,4 +49,14 @@ object Util {
         return format.format(date)
     }
 
+}
+
+fun ImageView.loadImg(url: String, authorAvatar: String) {
+    val url = "$url${authorAvatar}"
+    Glide.with(this)
+        .load(url)
+        .placeholder(R.drawable.ic_baseline_timelapse_24)
+        .error(R.drawable.ic_baseline_error_24)
+        .timeout(10_000)
+        .into(this)
 }

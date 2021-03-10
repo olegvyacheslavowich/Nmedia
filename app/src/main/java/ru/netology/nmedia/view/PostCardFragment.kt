@@ -14,6 +14,7 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.util.Util
 import ru.netology.nmedia.util.Util.timeToString
+import ru.netology.nmedia.util.loadImg
 import ru.netology.nmedia.view.PostsFragment.Companion.textArg
 import ru.netology.nmedia.viewmodel.PostViewModel
 
@@ -35,6 +36,7 @@ class PostCardFragment : Fragment() {
 
         viewModel.postData.observe(viewLifecycleOwner, { post ->
             binding.apply {
+                authorImageView.loadImg("http://1.1.1.1:9194/avatars/", post.authorAvatar)
                 authorTextView.text = post.author
                 publishedTextView.text = post.published.timeToString()
                 contentTextView.text = post.content
@@ -91,7 +93,7 @@ class PostCardFragment : Fragment() {
                     }
                 }
 
-                videoImageView.setOnClickListener {
+                attachmentImageView.setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("post.videoUrl"))
                     if (context?.let { intent.resolveActivity(it.packageManager) } != null) {
                         startActivity(intent)

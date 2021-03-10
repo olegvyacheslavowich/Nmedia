@@ -9,6 +9,7 @@ data class PostEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val author: String,
+    val authorAvatar: String,
     val published: Long,
     val content: String,
     val liked: Boolean,
@@ -24,6 +25,7 @@ data class PostEntity(
             return PostEntity(
                 post.id,
                 post.author,
+                post.authorAvatar,
                 post.published,
                 post.content,
                 post.liked,
@@ -40,6 +42,7 @@ data class PostEntity(
             Post(
                 post.id,
                 post.author,
+                post.authorAvatar,
                 post.published,
                 post.content,
                 post.videoUrl,
