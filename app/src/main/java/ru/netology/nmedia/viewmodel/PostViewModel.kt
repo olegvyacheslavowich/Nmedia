@@ -11,13 +11,12 @@ import ru.netology.nmedia.model.draftcontent.impl.DraftContentRepositorySqlImpl
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.model.post.PostRepository
 import ru.netology.nmedia.model.post.getEmptyPost
-import ru.netology.nmedia.model.post.impl.PostRepositoryHttpImpl
+import ru.netology.nmedia.model.post.impl.PostRepositoryImpl
 import java.io.IOException
-import kotlin.concurrent.thread
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: PostRepository = PostRepositoryHttpImpl()
+    private val repository: PostRepository = PostRepositoryImpl()
     private val draftContentRepository = DraftContentRepositorySqlImpl(
         AppDatabase.getInstance(application).draftContentDao()
     )
@@ -151,7 +150,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(e: Exception) {
-                FeedModel(error = true)
+                FeedModel(error = true).let {
+                    dataList.postValue(it)
+                }
             }
         })
     }

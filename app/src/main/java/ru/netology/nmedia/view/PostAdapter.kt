@@ -47,7 +47,7 @@ class PostViewHolder(
     fun bind(post: Post) {
         binding.apply {
 
-            authorImageView.loadImg("http://1.1.1.1:9194/avatars/", post.authorAvatar)
+            authorImageView.loadImg("http://85.115.173.83:9194/avatars/", post.authorAvatar)
             authorTextView.text = post.author
             publishedTextView.text = post.published.timeToString()
             contentTextView.text = post.content
@@ -56,7 +56,7 @@ class PostViewHolder(
             likesButton.text = Util.parseNumber(post.likesCount)
             shareButton.text = Util.parseNumber(post.shareCount)
             attachmentImageView.loadImg(
-                "http://1.1.1.1:9194/images/",
+                "http://85.115.173.83:9194/images/",
                 post.attachment?.url ?: ""
             )
 
