@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 
 interface DraftContentRepository {
 
-    fun update(content: String)
+    suspend fun update(content: String)
     fun get(): LiveData<String>
-    fun remove()
+    suspend fun remove()
 
 }

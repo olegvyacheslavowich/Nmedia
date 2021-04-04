@@ -4,11 +4,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import ru.netology.nmedia.BuildConfig
 
 object PostsApi {
-    private const val BASE_URL = "${BuildConfig.BASE_URL}/api/posts/"
+    private const val BASE_URL = "${BuildConfig.BASE_URL}/api/"
 
     private val logging = HttpLoggingInterceptor().apply {
         if (BuildConfig.DEBUG) {

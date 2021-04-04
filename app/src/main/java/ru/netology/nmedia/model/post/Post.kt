@@ -2,6 +2,7 @@ package ru.netology.nmedia.model.post
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import ru.netology.nmedia.db.entity.PostEntity
 
 
 @Parcelize
@@ -36,6 +37,23 @@ fun getEmptyPost(): Post {
         0
     )
 }
+
+fun Post.toEntity(): PostEntity =
+    PostEntity(
+        this.id,
+        this.author,
+        this.authorAvatar,
+        this.published,
+        this.content,
+        this.liked,
+        this.likesCount,
+        this.shared,
+        this.shareCount,
+        this.viewCount,
+        this.videoUrl
+    )
+
+fun List<Post>.toEntity(): List<PostEntity> = map(Post::toEntity)
 
 
 

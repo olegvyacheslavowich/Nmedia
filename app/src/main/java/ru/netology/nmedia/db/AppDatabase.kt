@@ -35,8 +35,7 @@ abstract class AppDatabase : RoomDatabase() {
                     override fun migrate(database: SupportSQLiteDatabase) {
                         database.execSQL("ALTER TABLE posts ADD COLUMN authorAvatar TEXT DEFAULT '' NOT NULL");
                     }
-                })
-                .allowMainThreadQueries().
+                }).
                 build()
     }
 

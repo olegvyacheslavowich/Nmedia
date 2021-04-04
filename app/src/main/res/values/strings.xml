@@ -14,4 +14,6 @@
     <string name="new_post_notification">%1$s published new post</string>
     <string name="new_post_channel">New post</string>
     <string name="new_post_channel_description">Channel for new posts notification</string>
+    <string name="error_loading">Error loading</string>
+    <string name="retry_action_title">Retry</string>
 </resources>

@@ -11,13 +11,13 @@ import ru.netology.nmedia.db.entity.DraftContentEntity
 interface DraftContentDao {
 
     @Insert
-    fun save(draftContentEntity: DraftContentEntity)
+    suspend fun save(draftContentEntity: DraftContentEntity)
 
     @Query("DELETE FROM draft_content")
-    fun removeAll()
+    suspend fun removeAll()
 
 
-    fun update(draftContentEntity: DraftContentEntity) {
+    suspend fun update(draftContentEntity: DraftContentEntity) {
         removeAll()
         save(draftContentEntity)
     }

@@ -11,10 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostsBinding
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.util.NewPostArg
+import ru.netology.nmedia.util.PostArg
 import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.viewmodel.PostViewModel
 
@@ -24,6 +26,7 @@ class PostsFragment : Fragment() {
         const val intentType = "text/plain"
         var Bundle.textArg: String? by StringArg
         var Bundle.newPostArg: Boolean by NewPostArg
+        var Bundle.postArg: Post? by PostArg
     }
 
     private val viewModel: PostViewModel by viewModels(::requireParentFragment)
@@ -43,8 +46,11 @@ class PostsFragment : Fragment() {
 
         val postAdapter = PostAdapter(object : OnInteractionListener {
             override fun onClicked(post: Post) {
-                viewModel.getById(post.id)
-                findNavController().navigate(R.id.action_postsFragment_to_postCardFragment)
+                findNavController().navigate(
+                    R.id.action_postsFragment_to_postCardFragment,
+                    Bundle().apply {
+                        postArg = post
+                    })
             }
 
             override fun onLike(post: Post) {
@@ -85,15 +91,24 @@ class PostsFragment : Fragment() {
             }
         })
 
-        viewModel.dataList.observe(viewLifecycleOwner) { state ->
-            postAdapter.submitList(state.posts)
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progressBar.isVisible = state.loading
-            binding.errorGroup.isVisible = state.error
-            binding.emptyText.isVisible = state.empty
+            binding.swipeRefresh.isRefreshing = state.refreshing
+            if (state.error) {
+                Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.retry_action_title) {
+                        viewModel.loadPosts()
+                    }
+                    .show()
+            }
+
+        }
+        viewModel.data.observe(viewLifecycleOwner) { state ->
+            postAdapter.submitList(state.posts)
         }
 
-        binding.retryButton.setOnClickListener {
-            viewModel.loadPosts()
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refreshPosts()
         }
 
         val adAdapter = AdAdapter()

@@ -105,13 +105,11 @@
         android:layout_height="wrap_content"
         android:checkable="true"
         app:icon="@drawable/ic_like"
-        app:iconTint="@color/ic_like"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/bottomBarrier"
         app:layout_constraintEnd_toStartOf="@id/shareButton"
-        tools:textColor="@color/ic_like"
         tools:text="@sample/posts.json/data/likesCount"
-        style="@style/ButtonStyle"/>
+        style="@style/Widget.AppTheme.LikeCheckBox"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/shareButton"

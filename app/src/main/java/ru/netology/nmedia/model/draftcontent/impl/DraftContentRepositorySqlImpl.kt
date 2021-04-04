@@ -10,7 +10,7 @@ import ru.netology.nmedia.model.draftcontent.DraftContentRepository
 class DraftContentRepositorySqlImpl(private val draftContentDao: DraftContentDao) :
     DraftContentRepository {
 
-    override fun update(content: String) {
+    override suspend fun update(content: String) {
         draftContentDao.update(DraftContentEntity.fromDto(content))
     }
 
@@ -18,7 +18,7 @@ class DraftContentRepositorySqlImpl(private val draftContentDao: DraftContentDao
         DraftContentEntity.toDto(draftContent?:DraftContentEntity(""))
     }
 
-    override fun remove() {
+    override suspend fun remove() {
         draftContentDao.removeAll()
     }
 

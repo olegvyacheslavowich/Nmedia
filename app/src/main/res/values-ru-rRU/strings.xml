@@ -15,4 +15,6 @@
     <string name="new_post_notification">Пользователь %1$s разместил новый пост</string>
     <string name="new_post_channel">Новый пост</string>
     <string name="new_post_channel_description">Канал для оповещения о новых постах</string>
+    <string name="error_loading">Ошибка загрузки</string>
+    <string name="retry_action_title">Повторить</string>
 </resources>
