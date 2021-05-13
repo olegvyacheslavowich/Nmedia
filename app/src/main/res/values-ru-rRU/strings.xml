@@ -17,4 +17,6 @@
     <string name="new_post_channel_description">Канал для оповещения о новых постах</string>
     <string name="error_loading">Ошибка загрузки</string>
     <string name="retry_action_title">Повторить</string>
+    <string name="error_saving">Ошибка сохранения</string>
+    <string name="update_new_post">Новый пост</string>
 </resources>

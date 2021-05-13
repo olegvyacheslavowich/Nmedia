@@ -11,7 +11,7 @@ import ru.netology.nmedia.db.dao.post.PostDao
 import ru.netology.nmedia.db.entity.DraftContentEntity
 import ru.netology.nmedia.db.entity.PostEntity
 
-@Database(entities = [PostEntity::class, DraftContentEntity::class], version = 2)
+@Database(entities = [PostEntity::class, DraftContentEntity::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun postDao(): PostDao
@@ -35,8 +35,18 @@ abstract class AppDatabase : RoomDatabase() {
                     override fun migrate(database: SupportSQLiteDatabase) {
                         database.execSQL("ALTER TABLE posts ADD COLUMN authorAvatar TEXT DEFAULT '' NOT NULL");
                     }
-                }).
-                build()
+                })
+                .addMigrations(object : Migration(2, 3) {
+                    override fun migrate(database: SupportSQLiteDatabase) {
+                        database.execSQL("ALTER TABLE posts ADD COLUMN notSaved INTEGER DEFAULT 0 NOT NULL");
+                    }
+                })
+                .addMigrations(object : Migration(3, 4) {
+                    override fun migrate(database: SupportSQLiteDatabase) {
+                        database.execSQL("ALTER TABLE posts ADD COLUMN needShow INTEGER DEFAULT 0 NOT NULL");
+                    }
+                })
+                .build()
     }
 
 }

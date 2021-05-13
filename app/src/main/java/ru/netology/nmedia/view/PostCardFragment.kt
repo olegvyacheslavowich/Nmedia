@@ -39,7 +39,7 @@ class PostCardFragment : Fragment() {
 
         val post = arguments?.postArg ?: getEmptyPost()
         binding.apply {
-            authorImageView.loadImg("http://1.1.1.1:9194/avatars/", post.authorAvatar)
+            authorImageView.loadImg("http://85.115.173.83:9194/avatars/", post.authorAvatar)
             authorTextView.text = post.author
             publishedTextView.text = post.published.timeToString()
             contentTextView.text = post.content
@@ -61,7 +61,6 @@ class PostCardFragment : Fragment() {
 
                 if (context?.let { intent.resolveActivity(it.packageManager) } != null) {
                     startActivity(shareIntent)
-                    viewModel.shareById(post.id)
                 }
             }
 

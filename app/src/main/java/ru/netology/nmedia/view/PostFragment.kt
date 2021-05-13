@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostChangeBinding
 import ru.netology.nmedia.util.Util
 import ru.netology.nmedia.view.PostsFragment.Companion.newPostArg
@@ -40,15 +41,29 @@ class PostFragment : Fragment() {
             }
         }
 
+        viewModel.postState.observe(viewLifecycleOwner) { state ->
+            if (state.error) {
+                Snackbar.make(binding.root, R.string.error_saving, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.retry_action_title) {
+                        viewModel.save()
+                    }
+                    .show()
+                return@observe
+            }
+
+            if (state.saved) {
+                viewModel.deleteDraftContent()
+                findNavController().navigateUp()
+            }
+        }
+
         binding.postTextEditText.requestFocus()
         binding.addPostFab.setOnClickListener {
             if (!binding.postTextEditText.text.isNullOrBlank()) {
                 viewModel.changeContent(binding.postTextEditText.text.toString())
                 viewModel.save()
+                Util.hideKeyboard(binding.root)
             }
-            viewModel.deleteDraftContent()
-            Util.hideKeyboard(binding.root)
-            findNavController().navigateUp()
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {

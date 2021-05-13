@@ -5,13 +5,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import ru.netology.nmedia.db.entity.PostEntity
+
 
 @Dao
 interface PostDao {
 
-    @Query("SELECT * FROM posts ORDER BY id DESC")
-    fun getAll(): LiveData<List<PostEntity>>
+    @Query("SELECT * FROM posts WHERE needShow = 1 ORDER BY id DESC")
+    fun getAll(): Flow<List<PostEntity>>
 
     @Query("SELECT * FROM posts WHERE id = :id")
     fun getById(id: Int): LiveData<PostEntity>
@@ -53,4 +55,7 @@ interface PostDao {
 
     @Query("DELETE FROM posts WHERE id = :id")
     suspend fun removeById(id: Int)
+
+    @Query("UPDATE posts SET needShow = 1")
+    suspend fun updateShow()
 }

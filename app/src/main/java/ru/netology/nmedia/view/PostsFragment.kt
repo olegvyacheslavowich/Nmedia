@@ -66,7 +66,6 @@ class PostsFragment : Fragment() {
 
                 if (context?.let { intent.resolveActivity(it.packageManager) } != null) {
                     startActivity(shareIntent)
-                    viewModel.shareById(post.id)
                 }
             }
 
@@ -107,8 +106,19 @@ class PostsFragment : Fragment() {
             postAdapter.submitList(state.posts)
         }
 
-        binding.swipeRefresh.setOnRefreshListener {
-            viewModel.refreshPosts()
+        binding.apply {
+            viewModel.newCount.observe(viewLifecycleOwner) { count ->
+                if (count > 0) binding.updatePostsButton.show()
+            }
+
+            updatePostsButton.setOnClickListener {
+                viewModel.updateShowing()
+                updatePostsButton.hide()
+            }
+
+            swipeRefresh.setOnRefreshListener {
+                viewModel.refreshPosts()
+            }
         }
 
         val adAdapter = AdAdapter()

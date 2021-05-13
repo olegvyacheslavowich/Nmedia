@@ -1,11 +1,13 @@
 package ru.netology.nmedia.view
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.model.post.Post
@@ -46,7 +48,7 @@ class PostViewHolder(
     fun bind(post: Post) {
         binding.apply {
 
-            authorImageView.loadImg("http://85.115.173.83:9194/avatars/", post.authorAvatar)
+            authorImageView.loadImg("${BuildConfig.BASE_URL}/avatars/", post.authorAvatar)
             authorTextView.text = post.author
             publishedTextView.text = post.published.timeToString()
             contentTextView.text = post.content
@@ -54,8 +56,11 @@ class PostViewHolder(
             likesButton.isChecked = post.liked
             likesButton.text = Util.parseNumber(post.likesCount)
             shareButton.text = Util.parseNumber(post.shareCount)
+            //notSaved.visibility = if (post.notSaved) View.VISIBLE else View.INVISIBLE
+            notSaved.visibility = View.INVISIBLE
+
             attachmentImageView.loadImg(
-                "http://85.115.173.83:9194/images/",
+                "${BuildConfig.BASE_URL}/images/",
                 post.attachment?.url ?: ""
             )
 

@@ -1,7 +1,12 @@
 package ru.netology.nmedia.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.api.posts.PostsApiService
 import ru.netology.nmedia.db.AppDatabase
@@ -13,6 +18,7 @@ import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.model.post.PostRepository
 import ru.netology.nmedia.model.post.getEmptyPost
 import ru.netology.nmedia.model.post.impl.PostRepositoryImpl
+import ru.netology.nmedia.util.SingleLiveEvent
 import java.lang.Exception
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
@@ -23,7 +29,13 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository =
         PostRepositoryImpl(AppDatabase.getInstance(context = application).postDao())
-    val data: LiveData<FeedModel> = repository.data.map(::FeedModel)
+
+    val data: LiveData<FeedModel> = repository.data
+        .map(::FeedModel)
+        .catch { e ->
+            _dataState.value = FeedModelState(error = true)
+        }
+        .asLiveData(Dispatchers.Default)
 
     private val adRepository = AdRepositoryInMemoryImpl()
     val error = MutableLiveData<String>()
@@ -33,12 +45,19 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val dataState: LiveData<FeedModelState>
         get() = _dataState
 
+    private val _postState = MutableLiveData<FeedModelState>()
+    val postState: LiveData<FeedModelState>
+        get() = _postState
 
     val edited = MutableLiveData(getEmptyPost())
     var draftContent: LiveData<String> = draftContentRepository.get()
 
     init {
         loadPosts()
+    }
+
+    val newCount = data.switchMap {
+        repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0).asLiveData()
     }
 
 
@@ -52,10 +71,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun shareById(id: Int) {
-        TODO()
-    }
-
     fun removeById(id: Int) = viewModelScope.launch {
         try {
             _dataState.value = FeedModelState(loading = true)
@@ -67,28 +82,29 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun save() {
-        /*edited.value?.let {
-            repository.save(it, object : PostRepository.GeneralCallback {
-                override fun onSuccess() {
-                    loadPosts()
-                    edited.postValue(getEmptyPost())
+        edited.value?.let {
+            viewModelScope.launch {
+                try {
+                    _postState.value = FeedModelState(loading = true)
+                    repository.save(it)
+                    _postState.value = FeedModelState(saved = true)
+                    _postState.value = FeedModelState()
+                    edited.value = getEmptyPost()
+                } catch (e: Exception) {
+                    _postState.value = FeedModelState(error = true)
                 }
-
-                override fun onError(e: Exception) {
-                    error.postValue(e.toString())
-                }
-            })
-        }*/
+            }
+        }
     }
 
     fun changeContent(content: String) {
-//        edited.value?.let {
-//            val text = content.trim()
-//            if (it.content == text) {
-//                return
-//            }
-//            edited.value = it.copy(content = text)
-//        }
+        edited.value?.let {
+            val text = content.trim()
+            if (it.content == text) {
+                return
+            }
+            edited.value = it.copy(content = text)
+        }
     }
 
     fun edit(post: Post) {
@@ -114,6 +130,16 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         try {
             _dataState.value = FeedModelState(refreshing = true)
             repository.getAll()
+            _dataState.value = FeedModelState()
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
+    fun updateShowing() = viewModelScope.launch {
+        try {
+            _dataState.value = FeedModelState(refreshing = true)
+            repository.updateShow()
             _dataState.value = FeedModelState()
         } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
