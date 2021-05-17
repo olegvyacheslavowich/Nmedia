@@ -16,4 +16,6 @@
     <string name="new_post_channel_description">Channel for new posts notification</string>
     <string name="error_loading">Error loading</string>
     <string name="retry_action_title">Retry</string>
+    <string name="error_saving">Saving error</string>
+    <string name="update_new_post">New post</string>
 </resources>

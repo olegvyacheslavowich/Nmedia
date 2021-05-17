@@ -17,7 +17,9 @@ data class PostEntity(
     val shared: Boolean,
     val shareCount: Int,
     val viewCount: Int,
-    val videoUrl: Int
+    val videoUrl: Int,
+    val notSaved: Boolean = false,
+    val needShow: Boolean = false
 )
 
 fun PostEntity.toDto(): Post =
@@ -32,7 +34,10 @@ fun PostEntity.toDto(): Post =
         this.likesCount,
         this.shared,
         this.shareCount,
-        this.viewCount
+        this.viewCount,
+        null,
+       this.notSaved,
+        this.needShow
     )
 
 

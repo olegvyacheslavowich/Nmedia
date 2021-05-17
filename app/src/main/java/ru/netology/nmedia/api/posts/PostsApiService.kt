@@ -1,5 +1,6 @@
 package ru.netology.nmedia.api.posts
 
+import retrofit2.Response
 import retrofit2.http.*
 import ru.netology.nmedia.model.post.Post
 
@@ -20,5 +21,8 @@ interface PostsApiService {
     suspend fun removeById(@Path("id") id: Int)
 
     @POST("posts")
-    suspend fun save(@Body post: Post)
+    suspend fun save(@Body post: Post): Response<Post>
+
+    @GET("posts/{id}/newer")
+    suspend fun getNewer(@Path("id") id: Int) : Response<List<Post>>
 }

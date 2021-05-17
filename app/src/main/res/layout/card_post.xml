@@ -130,8 +130,25 @@
         app:icon="@drawable/ic_remove_red_eye_black_24dp"
         app:iconTint="@color/colorBackground"
         app:layout_constraintTop_toBottomOf="@id/bottomBarrier"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/notSaved"
         tools:text="@sample/posts.json/data/viewsCount[1]"
+        style="@style/ButtonStyle"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/notSaved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:padding="0dp"
+        app:icon="@drawable/ic_baseline_sync"
+        app:iconGravity="textEnd"
+        android:clickable="false"
+        app:iconTint="@color/colorBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/viewsButton"
+        app:layout_constraintBottom_toBottomOf="@id/viewsButton"
         style="@style/ButtonStyle"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
