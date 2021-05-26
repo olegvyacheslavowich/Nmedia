@@ -18,9 +18,6 @@ interface PostDao {
     @Query("SELECT * FROM posts WHERE id = :id")
     fun getById(id: Int): LiveData<PostEntity>
 
-    @Query("SELECT COUNT(*) == 0 FROM posts")
-    suspend fun isEmpty(): Boolean
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: PostEntity)
 

@@ -23,6 +23,13 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_postsFragment_to_postImageFragment"
+            app:destination="@id/postImageFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/postFragment"
@@ -32,10 +39,36 @@
     <fragment
         android:id="@+id/postCardFragment"
         android:name="ru.netology.nmedia.view.PostCardFragment"
-        android:label="PostCardFragment" >
+        android:label="PostCardFragment">
         <action
             android:id="@+id/action_postCardFragment_to_postFragment"
             app:destination="@id/postFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_postCardFragment_to_postImageFragment"
+            app:destination="@id/postImageFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/postImageFragment"
+        android:name="ru.netology.nmedia.view.PostImageFragment"
+        android:label="PostImageFragment" >
+        <action
+            android:id="@+id/action_postImageFragment_to_postCardFragment"
+            app:destination="@id/postCardFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_postImageFragment_to_postsFragment2"
+            app:destination="@id/postsFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"

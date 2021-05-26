@@ -51,8 +51,8 @@ object Util {
 
 }
 
-fun ImageView.loadImg(url: String, authorAvatar: String) {
-    val url = "$url${authorAvatar}"
+fun ImageView.loadImg(url: String, imageName: String) {
+    val url = "$url${imageName}"
     Glide.with(this)
         .load(url)
         .placeholder(R.drawable.ic_baseline_timelapse_24)

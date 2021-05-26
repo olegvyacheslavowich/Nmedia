@@ -1,18 +1,23 @@
 package ru.netology.nmedia.model.post.impl
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import retrofit2.Response
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.nmedia.api.posts.PostsApi
 import ru.netology.nmedia.db.dao.post.PostDao
 import ru.netology.nmedia.db.entity.PostEntity
 import ru.netology.nmedia.db.entity.toDto
+import ru.netology.nmedia.dto.Media
+import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.errors.ApiError
 import ru.netology.nmedia.errors.AppError
 import ru.netology.nmedia.errors.AppError.Companion.from
+import ru.netology.nmedia.errors.NetworkError
+import ru.netology.nmedia.errors.UnknownError
 import ru.netology.nmedia.model.post.*
+import java.io.IOException
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
@@ -37,8 +42,8 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             emit(body.size)
         }
     }.catch { e ->
-        throw from(e)
-    }.flowOn(Dispatchers.Default)
+        throw e
+    }.flowOn(Dispatchers.IO)
 
 
     override suspend fun likeById(id: Int) {
@@ -66,8 +71,40 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         }
     }
 
+    override suspend fun saveWithAttachment(post: Post, mediaUpload: MediaUpload) {
+        try {
+            val media = upload(mediaUpload)
+            val postWithAttachment =
+                post.copy(attachment = Attachment(media.id, AttachmentType.IMAGE))
+            save(postWithAttachment)
+        } catch (e: AppError) {
+            throw e
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
     override suspend fun updateShow() {
         dao.updateShow()
+    }
+
+    override suspend fun upload(mediaUpload: MediaUpload): Media {
+        try {
+            val media = MultipartBody.Part.createFormData(
+                "file", mediaUpload.file.name, mediaUpload.file.asRequestBody()
+            )
+            val response = PostsApi.retrofitService.upload(media)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            return response.body() ?: throw ApiError(response.code(), response.message())
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw NetworkError
+        }
     }
 
 
