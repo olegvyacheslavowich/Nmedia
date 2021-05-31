@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.model.post.getEmptyPost
@@ -39,7 +40,7 @@ class PostCardFragment : Fragment() {
 
         val post = arguments?.postArg ?: getEmptyPost()
         binding.apply {
-            authorImageView.loadImg("http://85.115.173.83:9194/avatars/", post.authorAvatar)
+            authorImageView.loadImg("${BuildConfig.BASE_URL}/avatars/", post.authorAvatar)
             authorTextView.text = post.author
             publishedTextView.text = post.published.timeToString()
             contentTextView.text = post.content
@@ -47,6 +48,11 @@ class PostCardFragment : Fragment() {
             likesButton.isChecked = post.liked
             likesButton.text = Util.parseNumber(post.likesCount)
             shareButton.text = Util.parseNumber(post.shareCount)
+
+            attachmentImageView.loadImg(
+                "${BuildConfig.BASE_URL}/media/",
+                post.attachment?.url ?: ""
+            )
 
             likesButton.setOnClickListener {
                 viewModel.likeById(post.id)
@@ -88,18 +94,11 @@ class PostCardFragment : Fragment() {
                 }.show()
             }
 
-            playVideoImageView.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("post.videoUrl"))
-                if (context?.let { intent.resolveActivity(it.packageManager) } != null) {
-                    startActivity(intent)
-                }
-            }
-
             attachmentImageView.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("post.videoUrl"))
-                if (context?.let { intent.resolveActivity(it.packageManager) } != null) {
-                    startActivity(intent)
-                }
+                findNavController().navigate(R.id.action_postCardFragment_to_postImageFragment,
+                    Bundle().apply {
+                        textArg = post.attachment?.url
+                    })
             }
         }
 

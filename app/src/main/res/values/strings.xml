@@ -18,4 +18,9 @@
     <string name="retry_action_title">Retry</string>
     <string name="error_saving">Saving error</string>
     <string name="update_new_post">New post</string>
+    <string name="pick_photo">Select photo</string>
+    <string name="attach_file">Attach button</string>
+    <string name="add_photo">Add photo</string>
+    <string name="post_image">Post image</string>
+    <string name="delete_photo">Photo delete</string>
 </resources>

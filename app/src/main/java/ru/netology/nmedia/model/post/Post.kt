@@ -57,7 +57,8 @@ fun Post.toEntity(): PostEntity =
         this.viewCount,
         this.videoUrl,
         this.notSaved,
-        true
+        true,
+        this.attachment?.toEntity()
     )
 
 fun Post.toEntityNoShow(): PostEntity =
@@ -74,7 +75,8 @@ fun Post.toEntityNoShow(): PostEntity =
         this.viewCount,
         this.videoUrl,
         this.notSaved,
-        false
+        false,
+        this.attachment?.toEntity()
     )
 
 fun List<Post>.toEntityNoShow(needShow: Boolean = false): List<PostEntity> =
