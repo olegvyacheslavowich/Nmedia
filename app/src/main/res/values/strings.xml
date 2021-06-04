@@ -31,4 +31,9 @@
     <string name="empty_login">Enter login</string>
     <string name="empty_pass">Password is empty</string>
     <string name="password_are_different">Passwords are different</string>
+    <string name="pick_photo">Select photo</string>
+    <string name="attach_file">Attach button</string>
+    <string name="add_photo">Add photo</string>
+    <string name="post_image">Post image</string>
+    <string name="delete_photo">Photo delete</string>
 </resources>

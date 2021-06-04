@@ -52,14 +52,16 @@ fun Post.toEntity(): PostEntity =
         this.authorAvatar,
         this.published,
         this.content,
+        this.videoUrl,
         this.liked,
         this.likesCount,
         this.shared,
         this.shareCount,
         this.viewCount,
-        this.videoUrl,
+        this.attachment?.toEntity(),
         this.notSaved,
         true,
+        false,       
         this.authorId
     )
 
@@ -70,14 +72,16 @@ fun Post.toEntityNoShow(): PostEntity =
         this.authorAvatar,
         this.published,
         this.content,
+        this.videoUrl,
         this.liked,
         this.likesCount,
         this.shared,
         this.shareCount,
         this.viewCount,
-        this.videoUrl,
+        this.attachment?.toEntity(),
         this.notSaved,
         false,
+        false,       
         this.authorId
     )
 

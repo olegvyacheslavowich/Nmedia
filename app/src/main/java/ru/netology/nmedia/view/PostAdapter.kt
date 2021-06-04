@@ -60,9 +60,13 @@ class PostViewHolder(
             postMenuImageView.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
 
             attachmentImageView.loadImg(
-                "${BuildConfig.BASE_URL}/images/",
+                "${BuildConfig.BASE_URL}/media/",
                 post.attachment?.url ?: ""
             )
+
+            attachmentImageView.setOnClickListener {
+                onInteractionListener.onPlay(post)
+            }
 
             root.setOnClickListener {
                 onInteractionListener.onClicked(post)
@@ -95,16 +99,6 @@ class PostViewHolder(
                     }
                 }.show()
             }
-
-            playVideoImageView.setOnClickListener {
-                onInteractionListener.onPlay(post)
-            }
-
-            attachmentImageView.setOnClickListener {
-                onInteractionListener.onPlay(post)
-            }
-
-
         }
     }
 

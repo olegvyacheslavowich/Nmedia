@@ -32,4 +32,9 @@
     <string name="empty_login">Введите логин</string>
     <string name="empty_pass">Введите пароль</string>
     <string name="password_are_different">Пароли различаются</string>
+    <string name="pick_photo">Выбрать фото</string>
+    <string name="attach_file">Прикрепить файл</string>
+    <string name="add_photo">Добавить фото</string>
+    <string name="post_image">Картинка поста</string>
+    <string name="delete_photo">Удаление фото</string>
 </resources>

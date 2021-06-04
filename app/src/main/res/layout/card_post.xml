@@ -55,7 +55,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="postMenuImageView, authorImageView, authorTextView"/>
+        app:constraint_referenced_ids="postMenuImageView, authorImageView, authorTextView"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="80dp" />
 
     <TextView
         android:id="@+id/contentTextView"
@@ -78,26 +80,14 @@
         app:layout_constraintTop_toBottomOf="@+id/contentTextView"
         app:layout_constraintBottom_toTopOf="@id/bottomBarrier"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/playVideoImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checkable="true"
-        android:background="@android:color/transparent"
-        app:iconTint="@color/ic_play"
-        app:icon="@drawable/ic_baseline_play_circle_outline_48"
-        app:layout_constraintTop_toTopOf="@id/attachmentImageView"
-        app:layout_constraintBottom_toBottomOf="@id/attachmentImageView"
-        app:layout_constraintRight_toRightOf="@id/attachmentImageView"
-        app:layout_constraintLeft_toLeftOf="@id/attachmentImageView"
-        />
-
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/bottomBarrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="attachmentImageView" />
+        app:constraint_referenced_ids="attachmentImageView"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="314dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/likesButton"

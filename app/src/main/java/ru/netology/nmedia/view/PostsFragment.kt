@@ -87,10 +87,10 @@ class PostsFragment : Fragment() {
             }
 
             override fun onPlay(post: Post) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("post.videoUrl"))
-                if (context?.let { intent.resolveActivity(it.packageManager) } != null) {
-                    startActivity(intent)
-                }
+                findNavController().navigate(R.id.action_postsFragment_to_postImageFragment,
+                    Bundle().apply {
+                        textArg = post.attachment?.url
+                    })
             }
         })
 
@@ -127,9 +127,9 @@ class PostsFragment : Fragment() {
 
 
         binding.apply {
-//            viewModel.newCount.observe(viewLifecycleOwner) { count ->
-//                if (count > 0) binding.updatePostsButton.show()
-//            }
+/*            viewModel.newCount.observe(viewLifecycleOwner) { count ->
+                if (count > 0) binding.updatePostsButton.show()
+            }*/
 
             updatePostsButton.setOnClickListener {
                 viewModel.updateShowing()

@@ -1,7 +1,10 @@
 package ru.netology.nmedia.db.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import ru.netology.nmedia.model.post.Attachment
+import ru.netology.nmedia.model.post.AttachmentType
 import ru.netology.nmedia.model.post.Post
 
 @Entity(tableName = "posts")
@@ -21,7 +24,11 @@ data class PostEntity(
     val notSaved: Boolean = false,
     val needShow: Boolean = false,
     val authorId: Int = 0
+    @Embedded
+    val attachment: AttachmentEmbeddable?
 )
+
+data class AttachmentEmbeddable(val url: String, val type: AttachmentType)
 
 fun PostEntity.toDto(): Post =
     Post(
@@ -30,7 +37,6 @@ fun PostEntity.toDto(): Post =
         this.authorAvatar,
         this.published,
         this.content,
-        this.videoUrl,
         this.liked,
         this.likesCount,
         this.shared,
@@ -39,9 +45,12 @@ fun PostEntity.toDto(): Post =
         null,
         this.notSaved,
         this.needShow,
-        false,
-        this.authorId
+        this.authorId, 
+        this.attachment?.toDto()
     )
+
+fun AttachmentEmbeddable.toDto(): Attachment =
+    Attachment(this.url, this.type)
 
 
 fun List<PostEntity>.toDto(): List<Post> = map(PostEntity::toDto)
