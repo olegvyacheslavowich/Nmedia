@@ -11,18 +11,13 @@
         tools:layout="@layout/fragment_posts">
         <action
             android:id="@+id/action_postsFragment_to_postFragment"
-            app:destination="@id/postFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/fade_out" />
+            app:destination="@id/postFragment" />
         <action
             android:id="@+id/action_postsFragment_to_postCardFragment"
-            app:destination="@id/postCardFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out" />
+            app:destination="@id/postCardFragment" />
+        <action
+            android:id="@+id/action_postsFragment_to_authorizationFragment"
+            app:destination="@id/authorizationFragment" />
     </fragment>
     <fragment
         android:id="@+id/postFragment"
@@ -35,10 +30,22 @@
         android:label="PostCardFragment" >
         <action
             android:id="@+id/action_postCardFragment_to_postFragment"
-            app:destination="@id/postFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out" />
+            app:destination="@id/postFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/authorizationFragment"
+        android:name="ru.netology.nmedia.view.AuthorizationFragment"
+        android:label="AuthorizationFragment" >
+        <action
+            android:id="@+id/action_authorizationFragment_to_postsFragment"
+            app:destination="@id/postsFragment" />
+        <action
+            android:id="@+id/action_authorizationFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="ru.netology.nmedia.view.RegistrationFragment"
+        android:label="fragment_authorization"
+        tools:layout="@layout/fragment_authorization" />
 </navigation>

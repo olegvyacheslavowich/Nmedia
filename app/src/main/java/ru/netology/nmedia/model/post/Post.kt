@@ -20,7 +20,9 @@ data class Post(
     val viewCount: Int = 0,
     val attachment: Attachment? = null,
     val notSaved: Boolean = false,
-    val needShow: Boolean = false
+    val needShow: Boolean = false,
+    val ownedByMe: Boolean = false,
+    val authorId: Int = 0
 ) : Parcelable
 
 fun getEmptyPost(): Post {
@@ -57,7 +59,8 @@ fun Post.toEntity(): PostEntity =
         this.viewCount,
         this.videoUrl,
         this.notSaved,
-        true
+        true,
+        this.authorId
     )
 
 fun Post.toEntityNoShow(): PostEntity =
@@ -74,7 +77,8 @@ fun Post.toEntityNoShow(): PostEntity =
         this.viewCount,
         this.videoUrl,
         this.notSaved,
-        false
+        false,
+        this.authorId
     )
 
 fun List<Post>.toEntityNoShow(needShow: Boolean = false): List<PostEntity> =

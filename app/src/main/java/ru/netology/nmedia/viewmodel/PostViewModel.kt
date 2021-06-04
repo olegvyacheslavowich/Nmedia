@@ -1,25 +1,23 @@
 package ru.netology.nmedia.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import ru.netology.nmedia.api.posts.PostsApiService
+import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.auth.AuthState
 import ru.netology.nmedia.db.AppDatabase
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.model.ad.impl.AdRepositoryInMemoryImpl
 import ru.netology.nmedia.model.draftcontent.impl.DraftContentRepositorySqlImpl
 import ru.netology.nmedia.model.post.Post
-import ru.netology.nmedia.model.post.PostRepository
 import ru.netology.nmedia.model.post.getEmptyPost
 import ru.netology.nmedia.model.post.impl.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
-import java.lang.Exception
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -30,12 +28,20 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository =
         PostRepositoryImpl(AppDatabase.getInstance(context = application).postDao())
 
-    val data: LiveData<FeedModel> = repository.data
-        .map(::FeedModel)
-        .catch { e ->
-            _dataState.value = FeedModelState(error = true)
-        }
-        .asLiveData(Dispatchers.Default)
+    @ExperimentalCoroutinesApi
+    val data: LiveData<FeedModel> = AppAuth.getInstance()
+        .authStateFlow
+        .flatMapLatest { (myId, _) ->
+            repository.data
+                .map { posts ->
+                    FeedModel(
+                        posts.map { it.copy(ownedByMe = (it.authorId == myId && myId != 0)) },
+                        posts.isEmpty()
+                    )
+                }
+        }.asLiveData(Dispatchers.Default)
+
+    val authenticated = SingleLiveEvent<Boolean>()
 
     private val adRepository = AdRepositoryInMemoryImpl()
     val error = MutableLiveData<String>()
@@ -63,6 +69,12 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun likeById(id: Int) = viewModelScope.launch {
         try {
+            val isAuthenticated = AppAuth.getInstance().authStateFlow.value.id != 0
+            if (!isAuthenticated) {
+                authenticated.value = isAuthenticated
+                return@launch
+            }
+
             _dataState.value = FeedModelState(loading = true)
             repository.likeById(id)
             _dataState.value = FeedModelState(loading = false)
@@ -86,7 +98,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             viewModelScope.launch {
                 try {
                     _postState.value = FeedModelState(loading = true)
-                    repository.save(it)
+                    val post = it.copy(authorId = AppAuth.getInstance().authStateFlow.value.id)
+                    repository.save(post)
                     _postState.value = FeedModelState(saved = true)
                     _postState.value = FeedModelState()
                     edited.value = getEmptyPost()

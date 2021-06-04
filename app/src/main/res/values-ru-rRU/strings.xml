@@ -19,4 +19,17 @@
     <string name="retry_action_title">Повторить</string>
     <string name="error_saving">Ошибка сохранения</string>
     <string name="update_new_post">Новый пост</string>
+    <string name="sign_in">Вход</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="sign_out">Выход</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="auth_need">Нужно авторизоваться</string>
+    <string name="user_name">Имя</string>
+    <string name="retry_password">Повторите пароль</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="empty_name">Введите имя</string>
+    <string name="empty_login">Введите логин</string>
+    <string name="empty_pass">Введите пароль</string>
+    <string name="password_are_different">Пароли различаются</string>
 </resources>

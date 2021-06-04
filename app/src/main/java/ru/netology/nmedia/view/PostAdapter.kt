@@ -56,8 +56,8 @@ class PostViewHolder(
             likesButton.isChecked = post.liked
             likesButton.text = Util.parseNumber(post.likesCount)
             shareButton.text = Util.parseNumber(post.shareCount)
-            //notSaved.visibility = if (post.notSaved) View.VISIBLE else View.INVISIBLE
             notSaved.visibility = View.INVISIBLE
+            postMenuImageView.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
 
             attachmentImageView.loadImg(
                 "${BuildConfig.BASE_URL}/images/",
@@ -79,6 +79,7 @@ class PostViewHolder(
             postMenuImageView.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.post_menu)
+
                     setOnMenuItemClickListener {
                         when (it.itemId) {
                             R.id.remove -> {
