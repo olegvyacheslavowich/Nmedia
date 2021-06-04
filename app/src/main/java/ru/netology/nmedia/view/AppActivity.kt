@@ -46,6 +46,9 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 true
             }
             R.id.signUp -> {
+                findNavController(R.id.nav_host_fragment).navigate(
+                    R.id.action_postsFragment_to_registrationFragment
+                )
                 true
             }
             R.id.signOut -> {

@@ -52,17 +52,16 @@ fun Post.toEntity(): PostEntity =
         this.authorAvatar,
         this.published,
         this.content,
-        this.videoUrl,
         this.liked,
         this.likesCount,
         this.shared,
         this.shareCount,
         this.viewCount,
-        this.attachment?.toEntity(),
+        this.videoUrl,
         this.notSaved,
         true,
-        false,       
-        this.authorId
+        this.authorId,
+        this.attachment?.toEntity()
     )
 
 fun Post.toEntityNoShow(): PostEntity =
@@ -72,17 +71,16 @@ fun Post.toEntityNoShow(): PostEntity =
         this.authorAvatar,
         this.published,
         this.content,
-        this.videoUrl,
         this.liked,
         this.likesCount,
         this.shared,
         this.shareCount,
         this.viewCount,
-        this.attachment?.toEntity(),
+        this.videoUrl,
         this.notSaved,
         false,
-        false,       
-        this.authorId
+        this.authorId,
+        this.attachment?.toEntity()
     )
 
 fun List<Post>.toEntityNoShow(needShow: Boolean = false): List<PostEntity> =
