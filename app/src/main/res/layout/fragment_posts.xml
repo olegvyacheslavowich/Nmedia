@@ -15,8 +15,6 @@
         android:focusable="true"
         android:visibility="invisible"
         android:text="@string/update_new_post"
-        app:showMotionSpec="@anim/fragment_close_enter"
-        app:hideMotionSpec="@anim/fragment_close_exit"
         app:icon="@drawable/ic_baseline_sync_24"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout

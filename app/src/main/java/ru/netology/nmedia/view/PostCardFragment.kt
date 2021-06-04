@@ -48,6 +48,7 @@ class PostCardFragment : Fragment() {
             likesButton.isChecked = post.liked
             likesButton.text = Util.parseNumber(post.likesCount)
             shareButton.text = Util.parseNumber(post.shareCount)
+            postMenuImageView.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
 
             attachmentImageView.loadImg(
                 "${BuildConfig.BASE_URL}/media/",

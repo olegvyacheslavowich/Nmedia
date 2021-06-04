@@ -12,7 +12,6 @@ import ru.netology.nmedia.db.entity.toDto
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.errors.ApiError
-import ru.netology.nmedia.errors.AppError
 import ru.netology.nmedia.errors.AppError.Companion.from
 import ru.netology.nmedia.errors.NetworkError
 import ru.netology.nmedia.errors.UnknownError

@@ -23,6 +23,7 @@ data class PostEntity(
     val videoUrl: Int,
     val notSaved: Boolean = false,
     val needShow: Boolean = false,
+    val authorId: Int = 0
     @Embedded
     val attachment: AttachmentEmbeddable?
 )
@@ -36,15 +37,16 @@ fun PostEntity.toDto(): Post =
         this.authorAvatar,
         this.published,
         this.content,
-        this.videoUrl,
         this.liked,
         this.likesCount,
         this.shared,
         this.shareCount,
         this.viewCount,
-        this.attachment?.toDto(),
+        null,
         this.notSaved,
-        this.needShow
+        this.needShow,
+        this.authorId, 
+        this.attachment?.toDto()
     )
 
 fun AttachmentEmbeddable.toDto(): Attachment =
