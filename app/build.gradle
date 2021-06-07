@@ -68,6 +68,7 @@ dependencies {
     def retrofit_version = "2.9.0"
     def logging = "4.9.1"
     def image_picker_version = "2.0"
+    def coroutines_version = "1.4.3"
 
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom")
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -100,4 +101,6 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"
+
 }

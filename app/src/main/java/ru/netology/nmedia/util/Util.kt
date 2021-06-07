@@ -5,6 +5,9 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.nmedia.R
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
@@ -60,3 +63,5 @@ fun ImageView.loadImg(url: String, imageName: String) {
         .timeout(10_000)
         .into(this)
 }
+
+fun String.toRequestBodyMedia() = this.toRequestBody("text/plain".toMediaType())

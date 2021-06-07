@@ -2,6 +2,7 @@ package ru.netology.nmedia.model.auth
 
 import kotlinx.coroutines.flow.Flow
 import ru.netology.nmedia.auth.AuthState
+import ru.netology.nmedia.dto.MediaUpload
 
 interface AuthRepository {
 

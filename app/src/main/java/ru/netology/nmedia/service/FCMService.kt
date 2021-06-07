@@ -11,10 +11,10 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import ru.netology.nmedia.R
+import ru.netology.nmedia.api.auth.AuthApiService
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.model.like.Like
 import ru.netology.nmedia.model.post.Post
-import ru.netology.nmedia.util.Action
-import java.lang.IllegalArgumentException
 import kotlin.random.Random
 
 class FCMService : FirebaseMessagingService() {
@@ -51,7 +51,21 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        super.onMessageReceived(message)
+
+        val recepientId: Int? = message.data["recipientId"]?.toInt() ?: 0
+        val currentRecipientId = AppAuth.getInstance().authStateFlow.value.id
+
+        if (recepientId == null) {
+            handleLike(Like(recepientId, "Всем", 4, "Привет"))
+        } else if (recepientId == 0 && currentRecipientId != currentRecipientId) {
+            AppAuth.getInstance().sendPushToken()
+        } else if (recepientId != 0 && currentRecipientId != currentRecipientId) {
+            AppAuth.getInstance().sendPushToken()
+        } else if (recepientId == currentRecipientId) {
+            handleLike(Like(recepientId.toInt(), "Oleg", 4, "Karpenko"))
+        }
+
+/*      super.onMessageReceived(message)
 
         message.data[action]?.let {
             try {
@@ -66,11 +80,12 @@ class FCMService : FirebaseMessagingService() {
             } catch (e: IllegalArgumentException) {
                 Log.i(tagUnknownAction, it)
             }
-        }
+        }*/
     }
 
     override fun onNewToken(p0: String) {
-        super.onNewToken(p0)
+        Log.i("FCMService", p0)
+        AppAuth.getInstance().sendPushToken(p0)
     }
 
     fun handleLike(content: Like) {
@@ -93,8 +108,10 @@ class FCMService : FirebaseMessagingService() {
                 getString(R.string.new_post_notification, content.author)
             )
             .setContentText(content.content)
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText(content.content))
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(content.content)
+            )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
