@@ -10,6 +10,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import ru.netology.nmedia.R
 import ru.netology.nmedia.api.auth.AuthApiService
 import ru.netology.nmedia.auth.AppAuth
@@ -52,35 +53,19 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
 
-        val recepientId: Int? = message.data["recipientId"]?.toInt() ?: 0
-        val currentRecipientId = AppAuth.getInstance().authStateFlow.value.id
+        message.data["content"].let { json ->
 
-        if (recepientId == null) {
-            handleLike(Like(recepientId, "Всем", 4, "Привет"))
-        } else if (recepientId == 0 && currentRecipientId != currentRecipientId) {
-            AppAuth.getInstance().sendPushToken()
-        } else if (recepientId != 0 && currentRecipientId != currentRecipientId) {
-            AppAuth.getInstance().sendPushToken()
-        } else if (recepientId == currentRecipientId) {
-            handleLike(Like(recepientId.toInt(), "Oleg", 4, "Karpenko"))
-        }
+            val currentRecipientId = AppAuth.getInstance().authStateFlow.value.id
+            val pushMessage = gson.fromJson(json, Message::class.java)
 
-/*      super.onMessageReceived(message)
-
-        message.data[action]?.let {
-            try {
-                when (Action.valueOf(it)) {
-                    Action.LIKE -> handleLike(
-                        gson.fromJson(message.data[content], Like::class.java)
-                    )
-                    Action.POST -> handlePost(
-                        gson.fromJson(message.data[content], Post::class.java)
-                    )
-                }
-            } catch (e: IllegalArgumentException) {
-                Log.i(tagUnknownAction, it)
+            if (pushMessage.id == null) {
+                handleLike(Like(pushMessage.id, "Hello", 4, "everybody"))
+            } else if (currentRecipientId != currentRecipientId && (pushMessage.id == 0 || pushMessage.id != 0)) {
+                AppAuth.getInstance().sendPushToken()
+            } else if (pushMessage.id == currentRecipientId) {
+                handleLike(Like(pushMessage.id, pushMessage.id.toString(), 4, pushMessage.message))
             }
-        }*/
+        }
     }
 
     override fun onNewToken(p0: String) {
@@ -120,3 +105,8 @@ class FCMService : FirebaseMessagingService() {
     }
 
 }
+
+data class Message(
+    @SerializedName("recipientId") val id: Int?,
+    @SerializedName("content") val message: String
+)
