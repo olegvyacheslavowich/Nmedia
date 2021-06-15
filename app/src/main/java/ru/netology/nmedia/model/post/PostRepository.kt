@@ -16,4 +16,7 @@ interface PostRepository {
     suspend fun saveWithAttachment(post: Post, mediaUpload: MediaUpload)
     suspend fun updateShow()
     suspend fun upload(mediaUpload: MediaUpload): Media
+    suspend fun saveWork(post: Post, mediaUpload: MediaUpload?): Int
+    suspend fun processWork(id: Int)
+
 }
