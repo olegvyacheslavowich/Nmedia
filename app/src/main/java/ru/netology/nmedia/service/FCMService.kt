@@ -12,7 +12,6 @@ import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import ru.netology.nmedia.R
-import ru.netology.nmedia.api.auth.AuthApiService
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.model.like.Like
 import ru.netology.nmedia.model.post.Post

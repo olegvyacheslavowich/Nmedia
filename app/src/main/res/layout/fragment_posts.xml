@@ -11,11 +11,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|center"
         android:layout_margin="16dp"
+        android:checkable="true"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="invisible"
         android:text="@string/update_new_post"
-        app:icon="@drawable/ic_baseline_sync_24"/>
+        android:visibility="visible"
+        app:icon="@drawable/ic_baseline_sync_24" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -1,5 +1,9 @@
 package ru.netology.nmedia.model.post.impl
 
+import androidx.core.net.toFile
+import androidx.core.net.toUri
+import androidx.work.WorkManager
+import androidx.work.Worker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -7,7 +11,9 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.nmedia.api.posts.PostsApi
 import ru.netology.nmedia.db.dao.post.PostDao
+import ru.netology.nmedia.db.dao.work.PostWorkDao
 import ru.netology.nmedia.db.entity.PostEntity
+import ru.netology.nmedia.db.entity.PostWorkEntity
 import ru.netology.nmedia.db.entity.toDto
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.MediaUpload
@@ -18,7 +24,8 @@ import ru.netology.nmedia.errors.UnknownError
 import ru.netology.nmedia.model.post.*
 import java.io.IOException
 
-class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
+class PostRepositoryImpl(private val dao: PostDao, private val workDao: PostWorkDao) :
+    PostRepository {
 
     override val data = dao.getAll()
         .map(List<PostEntity>::toDto)
@@ -102,8 +109,43 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
-            throw NetworkError
+            throw UnknownError
         }
+    }
+
+    override suspend fun saveWork(post: Post, mediaUpload: MediaUpload?): Int {
+
+        try {
+            val entity = PostWorkEntity.fromDto(post).apply {
+                if (mediaUpload != null) {
+                    this.uri = mediaUpload.file.toURI().toString()
+                }
+            }
+            return workDao.insert(entity).toInt()
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+
+    }
+
+    override suspend fun processWork(id: Int) {
+
+        try {
+            workDao.getById(id).toDto().let { post ->
+                if (post.attachment == null) {
+                    save(post)
+                } else {
+                    saveWithAttachment(post, MediaUpload(post.attachment.url.toUri().toFile()))
+                }
+                workDao.removeById(id)
+            }
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+
+
     }
 
 

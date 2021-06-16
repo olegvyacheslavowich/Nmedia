@@ -1,8 +1,8 @@
 package ru.netology.nmedia.view
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.work.WorkManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nmedia.R
@@ -21,6 +22,7 @@ import ru.netology.nmedia.util.PostArg
 import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
+import ru.netology.nmedia.work.RefreshPostsWorker
 
 class PostsFragment : Fragment() {
 
@@ -159,6 +161,16 @@ class PostsFragment : Fragment() {
                     })
             }
         }
+
+        context?.let {
+            WorkManager.getInstance(it).getWorkInfosForUniqueWorkLiveData(RefreshPostsWorker.name)
+                .observe(viewLifecycleOwner) { workInfos ->
+                    for (info in workInfos) {
+                        Log.i("WOTRK INFO", info.state.toString())
+                    }
+                }
+        }
+
 
         return binding.root
     }

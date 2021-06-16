@@ -28,7 +28,15 @@ data class PostEntity(
     val attachment: AttachmentEmbeddable?
 )
 
-data class AttachmentEmbeddable(val url: String, val type: AttachmentType)
+data class AttachmentEmbeddable(val url: String, val type: AttachmentType) {
+
+    companion object {
+        fun fromDto(dto: Attachment?) = dto?.let {
+            AttachmentEmbeddable(it.url, it.type)
+        }
+    }
+
+}
 
 fun PostEntity.toDto(): Post =
     Post(
