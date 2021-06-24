@@ -2,14 +2,12 @@ package ru.netology.nmedia.model.post.impl
 
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import androidx.work.WorkManager
-import androidx.work.Worker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import ru.netology.nmedia.api.posts.PostsApi
+import ru.netology.nmedia.api.posts.PostsApiService
 import ru.netology.nmedia.db.dao.post.PostDao
 import ru.netology.nmedia.db.dao.work.PostWorkDao
 import ru.netology.nmedia.db.entity.PostEntity
@@ -24,7 +22,11 @@ import ru.netology.nmedia.errors.UnknownError
 import ru.netology.nmedia.model.post.*
 import java.io.IOException
 
-class PostRepositoryImpl(private val dao: PostDao, private val workDao: PostWorkDao) :
+class PostRepositoryImpl(
+    private val dao: PostDao,
+    private val workDao: PostWorkDao,
+    private val postApi: PostsApiService
+) :
     PostRepository {
 
     override val data = dao.getAll()
@@ -32,14 +34,14 @@ class PostRepositoryImpl(private val dao: PostDao, private val workDao: PostWork
         .flowOn(Dispatchers.Default)
 
     override suspend fun getAll() {
-        val all = PostsApi.retrofitService.getAll()
+        val all = postApi.getAll()
         dao.insert(all.toEntity(true))
     }
 
     override fun getNewerCount(id: Int): Flow<Int> = flow {
         while (true) {
             delay(10_000)
-            val response = PostsApi.retrofitService.getNewer(id)
+            val response = postApi.getNewer(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -53,19 +55,19 @@ class PostRepositoryImpl(private val dao: PostDao, private val workDao: PostWork
 
 
     override suspend fun likeById(id: Int) {
-        PostsApi.retrofitService.likeById(id)
+        postApi.likeById(id)
         dao.likeById(id)
     }
 
-    override suspend fun shareById(id: Int) = PostsApi.retrofitService.shareById(id)
+    override suspend fun shareById(id: Int) = postApi.shareById(id)
     override suspend fun removeById(id: Int) {
         dao.removeById(id)
-        PostsApi.retrofitService.removeById(id)
+        postApi.removeById(id)
     }
 
     override suspend fun save(post: Post) {
         try {
-            val response = PostsApi.retrofitService.save(post)
+            val response = postApi.save(post)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -101,7 +103,7 @@ class PostRepositoryImpl(private val dao: PostDao, private val workDao: PostWork
             val media = MultipartBody.Part.createFormData(
                 "file", mediaUpload.file.name, mediaUpload.file.asRequestBody()
             )
-            val response = PostsApi.retrofitService.upload(media)
+            val response = postApi.upload(media)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }

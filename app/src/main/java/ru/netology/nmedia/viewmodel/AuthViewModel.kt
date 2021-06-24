@@ -7,14 +7,13 @@ import kotlinx.coroutines.Dispatchers
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.auth.AuthState
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel(private val auth:AppAuth) : ViewModel() {
 
-    val data: LiveData<AuthState> = AppAuth
-        .getInstance()
+    val data: LiveData<AuthState> = auth
         .authStateFlow
         .asLiveData(Dispatchers.Default)
 
     val authenticated: Boolean
-        get() = AppAuth.getInstance().authStateFlow.value.id != 0
+        get() = auth.authStateFlow.value.id != 0
 
 }

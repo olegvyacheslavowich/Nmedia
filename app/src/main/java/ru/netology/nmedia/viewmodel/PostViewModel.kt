@@ -1,6 +1,5 @@
 package ru.netology.nmedia.viewmodel
 
-import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.*
 import androidx.work.*
@@ -10,36 +9,29 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
-import ru.netology.nmedia.db.AppDatabase
 import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.model.ad.impl.AdRepositoryInMemoryImpl
-import ru.netology.nmedia.model.draftcontent.impl.DraftContentRepositorySqlImpl
+import ru.netology.nmedia.model.draftcontent.DraftContentRepository
 import ru.netology.nmedia.model.post.PhotoModel
 import ru.netology.nmedia.model.post.Post
+import ru.netology.nmedia.model.post.PostRepository
 import ru.netology.nmedia.model.post.getEmptyPost
-import ru.netology.nmedia.model.post.impl.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 import ru.netology.nmedia.work.DeletePostWorker
 import ru.netology.nmedia.work.SavePostWorker
 import java.io.File
 
-class PostViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val appDatabase = AppDatabase.getInstance(context = application)
-
-    private val draftContentRepository = DraftContentRepositorySqlImpl(
-        AppDatabase.getInstance(application).draftContentDao()
-    )
-
-    private val workManager = WorkManager.getInstance(application)
-
-    private val repository =
-        PostRepositoryImpl(appDatabase.postDao(), appDatabase.postWorkDao())
+class PostViewModel(
+    private val repository: PostRepository,
+    private val draftContentRepository: DraftContentRepository,
+    private val workManager: WorkManager,
+    private val appAuth: AppAuth
+) : ViewModel() {
 
     @ExperimentalCoroutinesApi
-    val data: LiveData<FeedModel> = AppAuth.getInstance()
+    val data: LiveData<FeedModel> = appAuth
         .authStateFlow
         .flatMapLatest { (myId, _) ->
             repository.data
@@ -89,7 +81,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun likeById(id: Int) = viewModelScope.launch {
         try {
-            val isAuthenticated = AppAuth.getInstance().authStateFlow.value.id != 0
+            val isAuthenticated = appAuth.authStateFlow.value.id != 0
             if (!isAuthenticated) {
                 authenticated.value = isAuthenticated
                 return@launch
@@ -129,7 +121,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 try {
                     _postState.value = FeedModelState(loading = true)
 
-                    val post = it.copy(authorId = AppAuth.getInstance().authStateFlow.value.id)
+                    val post = it.copy(authorId = appAuth.authStateFlow.value.id)
                     val id = repository.saveWork(post, _photo.value?.file?.let { MediaUpload(it) })
                     val data = workDataOf(SavePostWorker.postId to id)
 

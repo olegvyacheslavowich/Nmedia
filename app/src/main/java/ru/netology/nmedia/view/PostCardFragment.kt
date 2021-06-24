@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
+import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.model.post.getEmptyPost
 import ru.netology.nmedia.util.Util
 import ru.netology.nmedia.util.Util.timeToString
@@ -29,7 +30,11 @@ class PostCardFragment : Fragment() {
         private const val intentType = "text/plain"
     }
 
-    private val viewModel: PostViewModel by viewModels(::requireParentFragment)
+    private val viewModel: PostViewModel by viewModels(
+        ownerProducer = ::requireParentFragment,
+        factoryProducer = {
+            DependencyContainer.getInstance(requireContext().applicationContext).viewModelFactory
+        })
 
     override fun onCreateView(
         inflater: LayoutInflater,

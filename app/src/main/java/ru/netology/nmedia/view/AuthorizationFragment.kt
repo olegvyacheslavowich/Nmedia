@@ -12,11 +12,17 @@ import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentAuthorizationBinding
+import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.viewmodel.AuthorizationViewModel
 
 class AuthorizationFragment : Fragment() {
 
-    val viewModel: AuthorizationViewModel by viewModels(::requireParentFragment)
+    val viewModel: AuthorizationViewModel by viewModels(
+        ownerProducer = ::requireParentFragment,
+        factoryProducer = {
+            DependencyContainer.getInstance(requireContext().applicationContext).viewModelFactory
+        }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,

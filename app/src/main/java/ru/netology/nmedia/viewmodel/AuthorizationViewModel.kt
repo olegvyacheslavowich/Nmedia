@@ -8,17 +8,16 @@ import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.auth.AuthState
 import ru.netology.nmedia.model.FeedModelState
+import ru.netology.nmedia.model.auth.AuthRepository
 import ru.netology.nmedia.model.auth.AuthRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 
-class AuthorizationViewModel(application: Application) : AndroidViewModel(application) {
+class AuthorizationViewModel(
+    private val appAuth: AppAuth,
+    private val repository: AuthRepository
+) : ViewModel() {
 
-    private val repository = AuthRepositoryImpl()
-
-    val data: LiveData<AuthState> =
-        AppAuth.getInstance()
-            .authStateFlow
-            .asLiveData(Dispatchers.Default)
+    val data: LiveData<AuthState> = appAuth.authStateFlow.asLiveData(Dispatchers.Default)
 
     private val _dataState = SingleLiveEvent<FeedModelState>()
     val dataState: SingleLiveEvent<FeedModelState>
@@ -29,7 +28,7 @@ class AuthorizationViewModel(application: Application) : AndroidViewModel(applic
             _dataState.value = FeedModelState(loading = true)
             repository.login(login, password)
                 .collect {
-                    AppAuth.getInstance().setAuth(it.id, it.token ?: "")
+                    appAuth.setAuth(it.id, it.token ?: "")
                 }
             _dataState.value = FeedModelState(loading = false)
         } catch (e: Exception) {

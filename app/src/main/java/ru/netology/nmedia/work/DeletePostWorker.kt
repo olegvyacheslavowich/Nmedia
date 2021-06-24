@@ -6,9 +6,14 @@ import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.netology.nmedia.db.AppDatabase
+import ru.netology.nmedia.model.post.PostRepository
 import ru.netology.nmedia.model.post.impl.PostRepositoryImpl
 
-class DeletePostWorker(context: Context, params: WorkerParameters) :
+class DeletePostWorker(
+    private val postRepository: PostRepository,
+    context: Context,
+    params: WorkerParameters
+) :
     CoroutineWorker(context, params) {
 
     companion object {
@@ -23,10 +28,8 @@ class DeletePostWorker(context: Context, params: WorkerParameters) :
             Result.failure()
         }
 
-        val appData = AppDatabase.getInstance(context = applicationContext)
-        val repository = PostRepositoryImpl(appData.postDao(), appData.postWorkDao())
         try {
-            repository.removeById(id)
+            postRepository.removeById(id)
             Result.success()
         } catch (e: Exception) {
             e.printStackTrace()

@@ -11,13 +11,18 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentRegistrationBinding
+import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.viewmodel.RegistrationViewModel
 
 
 class RegistrationFragment : Fragment() {
 
 
-    private val viewModel: RegistrationViewModel by viewModels(::requireParentFragment)
+    private val viewModel: RegistrationViewModel by viewModels(
+        ownerProducer = ::requireParentFragment,
+        factoryProducer = {
+            DependencyContainer.getInstance(requireContext().applicationContext).viewModelFactory
+        })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -13,6 +13,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import ru.netology.nmedia.R
 import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.model.like.Like
 import ru.netology.nmedia.model.post.Post
 import kotlin.random.Random
@@ -23,6 +24,7 @@ class FCMService : FirebaseMessagingService() {
     private val content = "content"
     private val tagUnknownAction = "Unknown action"
     private val gson = Gson()
+    private val appAuth by lazy { DependencyContainer.getInstance(application).appAuth }
 
     override fun onCreate() {
         super.onCreate()
@@ -54,13 +56,13 @@ class FCMService : FirebaseMessagingService() {
 
         message.data["content"].let { json ->
 
-            val currentRecipientId = AppAuth.getInstance().authStateFlow.value.id
+            val currentRecipientId = appAuth.authStateFlow.value.id
             val pushMessage = gson.fromJson(json, Message::class.java)
 
             if (pushMessage.id == null) {
                 handleLike(Like(pushMessage.id, "Hello", 4, "everybody"))
             } else if (currentRecipientId != currentRecipientId && (pushMessage.id == 0 || pushMessage.id != 0)) {
-                AppAuth.getInstance().sendPushToken()
+                appAuth.sendPushToken()
             } else if (pushMessage.id == currentRecipientId) {
                 handleLike(Like(pushMessage.id, pushMessage.id.toString(), 4, pushMessage.message))
             }
@@ -69,7 +71,7 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         Log.i("FCMService", p0)
-        AppAuth.getInstance().sendPushToken(p0)
+        appAuth.sendPushToken(p0)
     }
 
     fun handleLike(content: Like) {

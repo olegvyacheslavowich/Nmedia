@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostsBinding
+import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.util.NewPostArg
 import ru.netology.nmedia.util.PostArg
@@ -33,8 +34,17 @@ class PostsFragment : Fragment() {
         var Bundle.postArg: Post? by PostArg
     }
 
-    private val viewModel: PostViewModel by viewModels(::requireParentFragment)
-    private val authViewModel: AuthViewModel = AuthViewModel()
+    private val viewModel: PostViewModel by viewModels(
+        ownerProducer = ::requireParentFragment,
+        factoryProducer = {
+            DependencyContainer.getInstance(requireContext().applicationContext).viewModelFactory
+        })
+
+    private val authViewModel: AuthViewModel by viewModels(
+        ownerProducer = ::requireParentFragment,
+        factoryProducer = {
+            DependencyContainer.getInstance(requireContext()).viewModelFactory
+        })
 
     @ExperimentalCoroutinesApi
     override fun onCreateView(

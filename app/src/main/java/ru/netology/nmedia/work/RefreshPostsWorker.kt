@@ -7,9 +7,14 @@ import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.netology.nmedia.db.AppDatabase
+import ru.netology.nmedia.model.post.PostRepository
 import ru.netology.nmedia.model.post.impl.PostRepositoryImpl
 
-class RefreshPostsWorker(context: Context, params: WorkerParameters) :
+class RefreshPostsWorker(
+    private val postRepository: PostRepository,
+    context: Context,
+    params: WorkerParameters
+) :
     CoroutineWorker(context, params) {
 
     private val sp = applicationContext.getSharedPreferences(name, Context.MODE_PRIVATE)
@@ -20,13 +25,8 @@ class RefreshPostsWorker(context: Context, params: WorkerParameters) :
 
     override suspend fun doWork(): Result = withContext(Dispatchers.Default) {
 
-        val appData = AppDatabase.getInstance(context = applicationContext)
-
-        val repository =
-            PostRepositoryImpl(appData.postDao(), appData.postWorkDao())
-
         try {
-            repository.getAll()
+            postRepository.getAll()
             with(sp.edit()) {
                 putString("date", "success ${Calendar.getInstance().time}")
                 apply()

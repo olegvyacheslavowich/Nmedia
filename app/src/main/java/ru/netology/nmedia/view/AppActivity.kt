@@ -3,17 +3,25 @@ package ru.netology.nmedia.view
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import ru.netology.nmedia.R
-import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.viewmodel.AuthViewModel
 
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
-    private val viewModel: AuthViewModel = AuthViewModel()
+    private val container by lazy { DependencyContainer.getInstance(application) }
+
+    private val viewModel: AuthViewModel by viewModels(
+        factoryProducer = {
+            container.viewModelFactory
+        })
+
+    private val appAuth by lazy { container.appAuth }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +60,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 true
             }
             R.id.signOut -> {
-                AppAuth.getInstance().removeAuth()
+                appAuth.removeAuth()
                 true
             }
             else -> super.onOptionsItemSelected(item)
