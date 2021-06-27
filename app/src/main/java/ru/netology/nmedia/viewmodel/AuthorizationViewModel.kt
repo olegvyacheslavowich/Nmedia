@@ -1,7 +1,10 @@
 package ru.netology.nmedia.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -9,10 +12,11 @@ import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.auth.AuthState
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.model.auth.AuthRepository
-import ru.netology.nmedia.model.auth.AuthRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
+import javax.inject.Inject
 
-class AuthorizationViewModel(
+@HiltViewModel
+class AuthorizationViewModel @Inject constructor(
     private val appAuth: AppAuth,
     private val repository: AuthRepository
 ) : ViewModel() {

@@ -9,19 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentAuthorizationBinding
-import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.viewmodel.AuthorizationViewModel
 
+@AndroidEntryPoint
 class AuthorizationFragment : Fragment() {
 
     val viewModel: AuthorizationViewModel by viewModels(
-        ownerProducer = ::requireParentFragment,
-        factoryProducer = {
-            DependencyContainer.getInstance(requireContext().applicationContext).viewModelFactory
-        }
+        ownerProducer = ::requireParentFragment
     )
 
     override fun onCreateView(

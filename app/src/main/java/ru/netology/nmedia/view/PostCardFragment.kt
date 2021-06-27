@@ -1,7 +1,6 @@
 package ru.netology.nmedia.view
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,21 +8,20 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
-import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.model.post.getEmptyPost
 import ru.netology.nmedia.util.Util
 import ru.netology.nmedia.util.Util.timeToString
 import ru.netology.nmedia.util.loadImg
-import ru.netology.nmedia.view.PostsFragment.Companion.newPostArg
 import ru.netology.nmedia.view.PostsFragment.Companion.postArg
 import ru.netology.nmedia.view.PostsFragment.Companion.textArg
 import ru.netology.nmedia.viewmodel.PostViewModel
 
+@AndroidEntryPoint
 class PostCardFragment : Fragment() {
 
     companion object {
@@ -31,10 +29,7 @@ class PostCardFragment : Fragment() {
     }
 
     private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment,
-        factoryProducer = {
-            DependencyContainer.getInstance(requireContext().applicationContext).viewModelFactory
-        })
+        ownerProducer = ::requireParentFragment)
 
     override fun onCreateView(
         inflater: LayoutInflater,

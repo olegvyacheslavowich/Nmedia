@@ -13,10 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.work.WorkManager
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostsBinding
-import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.model.post.Post
 import ru.netology.nmedia.util.NewPostArg
 import ru.netology.nmedia.util.PostArg
@@ -25,6 +25,7 @@ import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 import ru.netology.nmedia.work.RefreshPostsWorker
 
+@AndroidEntryPoint
 class PostsFragment : Fragment() {
 
     companion object {
@@ -36,15 +37,11 @@ class PostsFragment : Fragment() {
 
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment,
-        factoryProducer = {
-            DependencyContainer.getInstance(requireContext().applicationContext).viewModelFactory
-        })
+    )
 
     private val authViewModel: AuthViewModel by viewModels(
         ownerProducer = ::requireParentFragment,
-        factoryProducer = {
-            DependencyContainer.getInstance(requireContext()).viewModelFactory
-        })
+    )
 
     @ExperimentalCoroutinesApi
     override fun onCreateView(

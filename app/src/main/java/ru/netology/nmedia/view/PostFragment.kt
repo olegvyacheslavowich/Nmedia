@@ -13,21 +13,20 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostChangeBinding
-import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.util.Util
 import ru.netology.nmedia.view.PostsFragment.Companion.newPostArg
 import ru.netology.nmedia.view.PostsFragment.Companion.textArg
 import ru.netology.nmedia.viewmodel.PostViewModel
 
+//@AndroidEntryPoint
 class PostFragment : Fragment() {
 
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment,
-        factoryProducer = {
-            DependencyContainer.getInstance(requireContext().applicationContext).viewModelFactory
-        })
+    )
     private var fragmentBinding: FragmentPostChangeBinding? = null
     private var attachFabClicked = false
 
