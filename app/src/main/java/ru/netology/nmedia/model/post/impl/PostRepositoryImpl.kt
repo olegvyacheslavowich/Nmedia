@@ -21,8 +21,9 @@ import ru.netology.nmedia.errors.NetworkError
 import ru.netology.nmedia.errors.UnknownError
 import ru.netology.nmedia.model.post.*
 import java.io.IOException
+import javax.inject.Inject
 
-class PostRepositoryImpl(
+class PostRepositoryImpl @Inject constructor(
     private val dao: PostDao,
     private val workDao: PostWorkDao,
     private val postApi: PostsApiService

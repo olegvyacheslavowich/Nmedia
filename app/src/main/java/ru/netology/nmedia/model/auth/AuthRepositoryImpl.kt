@@ -1,5 +1,6 @@
 package ru.netology.nmedia.model.auth
 
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -9,8 +10,10 @@ import ru.netology.nmedia.api.auth.AuthApiService
 import ru.netology.nmedia.auth.AuthState
 import ru.netology.nmedia.errors.ApiError
 import ru.netology.nmedia.errors.AppError.Companion.from
+import javax.inject.Inject
 
-class AuthRepositoryImpl(private val authApiService: AuthApiService) : AuthRepository {
+class AuthRepositoryImpl @Inject constructor(private val authApiService: AuthApiService) :
+    AuthRepository {
 
     override suspend fun login(login: String, password: String): Flow<AuthState> = flow {
         val response = authApiService.updateUser(login, password)

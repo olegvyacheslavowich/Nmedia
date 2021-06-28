@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 30
@@ -68,7 +69,7 @@ dependencies {
     def retrofit_version = "2.9.0"
     def logging = "4.9.1"
     def image_picker_version = "2.0"
-    def coroutines_version = "1.4.3"
+    def coroutines_version = "1.5.0"
     def work_version = "2.5.0"
 
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom")
@@ -101,8 +102,10 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.0"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.10"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"
     implementation "androidx.work:work-runtime-ktx:$work_version"
-
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    implementation 'androidx.hilt:hilt-work:1.0.0'
 }

@@ -1,6 +1,5 @@
 package ru.netology.nmedia.auth
 
-import android.content.Context
 import android.content.SharedPreferences
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
@@ -13,10 +12,14 @@ import kotlinx.coroutines.tasks.await
 import ru.netology.nmedia.api.auth.AuthApiService
 import ru.netology.nmedia.api.auth.token
 import ru.netology.nmedia.model.auth.PushToken
-import java.lang.Exception
-import java.lang.IllegalStateException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AppAuth(private val prefs: SharedPreferences, private val apiService: AuthApiService) {
+@Singleton
+class AppAuth @Inject constructor(
+    private val prefs: SharedPreferences,
+    private val apiService: AuthApiService
+) {
 
     private val idKey = "id"
 

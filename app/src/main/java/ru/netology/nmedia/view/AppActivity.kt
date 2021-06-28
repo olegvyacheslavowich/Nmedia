@@ -8,20 +8,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
-import ru.netology.nmedia.di.DependencyContainer
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.viewmodel.AuthViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
-    private val container by lazy { DependencyContainer.getInstance(application) }
+    private val viewModel: AuthViewModel by viewModels()
 
-    private val viewModel: AuthViewModel by viewModels(
-        factoryProducer = {
-            container.viewModelFactory
-        })
+    @Inject
+    lateinit var appAuth: AppAuth
 
-    private val appAuth by lazy { container.appAuth }
+    @Inject
+    lateinit var googleApiAvailability: GoogleApiAvailability
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +71,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     }
 
     private fun checkGoogleApiAvailability() {
-        with(GoogleApiAvailability.getInstance()) {
+        with(googleApiAvailability) {
             val code = isGooglePlayServicesAvailable(this@AppActivity)
             if (code == ConnectionResult.SUCCESS) {
                 return@with

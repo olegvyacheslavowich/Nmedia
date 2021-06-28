@@ -11,20 +11,24 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.auth.AppAuth
-import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.model.like.Like
 import ru.netology.nmedia.model.post.Post
+import javax.inject.Inject
 import kotlin.random.Random
 
+@AndroidEntryPoint
 class FCMService : FirebaseMessagingService() {
 
     private val action = "action"
     private val content = "content"
     private val tagUnknownAction = "Unknown action"
     private val gson = Gson()
-    private val appAuth by lazy { DependencyContainer.getInstance(application).appAuth }
+
+    @Inject
+    lateinit var appAuth: AppAuth
 
     override fun onCreate() {
         super.onCreate()

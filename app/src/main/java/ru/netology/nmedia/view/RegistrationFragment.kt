@@ -9,20 +9,18 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentRegistrationBinding
-import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.viewmodel.RegistrationViewModel
 
-
+@AndroidEntryPoint
 class RegistrationFragment : Fragment() {
 
 
     private val viewModel: RegistrationViewModel by viewModels(
-        ownerProducer = ::requireParentFragment,
-        factoryProducer = {
-            DependencyContainer.getInstance(requireContext().applicationContext).viewModelFactory
-        })
+        ownerProducer = ::requireParentFragment
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
