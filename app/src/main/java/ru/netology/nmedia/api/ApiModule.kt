@@ -2,6 +2,8 @@ package ru.netology.nmedia.api
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.google.android.gms.common.GoogleApiAvailability
 import dagger.Module
 import dagger.Provides
@@ -16,8 +18,11 @@ import retrofit2.create
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.api.auth.AuthApiService
 import ru.netology.nmedia.api.auth.token
+import ru.netology.nmedia.api.posts.PostPagingSource
 import ru.netology.nmedia.api.posts.PostsApiService
 import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.model.post.Post
+import ru.netology.nmedia.model.post.PostRepository
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -95,11 +100,21 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideAppAuth(prefs: SharedPreferences, retrofitAuthService: AuthApiService): AppAuth =
-        AppAuth(prefs, retrofitAuthService)
+    fun provideAppAuth(
+        prefs: SharedPreferences,
+        retrofitAuthService: AuthApiService,
+        postRepository: PostRepository
+    ): AppAuth =
+        AppAuth(prefs, retrofitAuthService, postRepository)
 
     @Provides
     fun provideGoogleApi(): GoogleApiAvailability = GoogleApiAvailability.getInstance()
+
+    @Provides
+    fun providePager(postsApiService: PostsApiService): Pager<Int, Post> = Pager(
+        config = PagingConfig(pageSize = 10),
+        pagingSourceFactory = { PostPagingSource(postsApiService) }
+    )
 
 }
 

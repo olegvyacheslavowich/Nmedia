@@ -56,6 +56,8 @@ class AuthorizationFragment : Fragment() {
             loginButton.setOnClickListener {
                 viewModel.login(loginEditText.text.toString(), passwordEditText.text.toString())
             }
+
+
             signUpButton.setOnClickListener {
                 findNavController().navigate(R.id.action_authorizationFragment_to_registrationFragment)
             }

@@ -11,14 +11,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ru.netology.nmedia.api.auth.AuthApiService
 import ru.netology.nmedia.api.auth.token
+import ru.netology.nmedia.api.posts.PostsApiService
 import ru.netology.nmedia.model.auth.PushToken
+import ru.netology.nmedia.model.post.PostRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AppAuth @Inject constructor(
     private val prefs: SharedPreferences,
-    private val apiService: AuthApiService
+    private val apiService: AuthApiService,
+    private val postRepository: PostRepository
 ) {
 
     private val idKey = "id"
@@ -52,16 +55,23 @@ class AppAuth @Inject constructor(
             apply()
         }
         sendPushToken()
+        CoroutineScope(Dispatchers.Default).launch {
+            postRepository.getAll()
+        }
     }
 
     @Synchronized
     fun removeAuth() {
         _authStateFlow.value = AuthState()
+
         with(prefs.edit()) {
             clear()
             commit()
         }
         sendPushToken()
+        CoroutineScope(Dispatchers.Default).launch {
+            postRepository.getAll()
+        }
     }
 
     fun sendPushToken(token: String? = null) {
