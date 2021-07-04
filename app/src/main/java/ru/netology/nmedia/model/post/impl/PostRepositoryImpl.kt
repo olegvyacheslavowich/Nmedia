@@ -2,11 +2,16 @@ package ru.netology.nmedia.model.post.impl
 
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import androidx.paging.DataSource
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import ru.netology.nmedia.api.posts.PostPagingSource
 import ru.netology.nmedia.api.posts.PostsApiService
 import ru.netology.nmedia.db.dao.post.PostDao
 import ru.netology.nmedia.db.dao.work.PostWorkDao
@@ -26,13 +31,12 @@ import javax.inject.Inject
 class PostRepositoryImpl @Inject constructor(
     private val dao: PostDao,
     private val workDao: PostWorkDao,
-    private val postApi: PostsApiService
+    private val postApi: PostsApiService,
+    pager: Pager<Int, Post>
 ) :
     PostRepository {
 
-    override val data = dao.getAll()
-        .map(List<PostEntity>::toDto)
-        .flowOn(Dispatchers.Default)
+    override val data: Flow<PagingData<Post>> = pager.flow
 
     override suspend fun getAll() {
         val all = postApi.getAll()

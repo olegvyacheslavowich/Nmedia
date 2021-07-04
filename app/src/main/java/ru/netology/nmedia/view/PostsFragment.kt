@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.work.WorkManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostsBinding
 import ru.netology.nmedia.model.post.Post
@@ -115,6 +118,26 @@ class PostsFragment : Fragment() {
             }
         }
 
+        lifecycleScope.launchWhenCreated {
+            postAdapter.loadStateFlow.collectLatest { state ->
+                binding.progressBar.isVisible =
+                    state.refresh is LoadState.Loading ||
+                            state.append is LoadState.Loading ||
+                            state.prepend is LoadState.Loading
+
+                if (state.refresh is LoadState.Error ||
+                    state.append is LoadState.Error ||
+                    state.prepend is LoadState.Error
+                ) {
+                    Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_SHORT)
+                        .setAction(R.string.retry_action_title) {
+                            viewModel.loadPosts()
+                        }
+                        .show()
+                }
+            }
+        }
+
         viewModel.authenticated.observe(viewLifecycleOwner) {
             if (it != true) {
                 Snackbar.make(binding.root, R.string.auth_need, Snackbar.LENGTH_SHORT)
@@ -125,8 +148,14 @@ class PostsFragment : Fragment() {
             }
         }
 
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            postAdapter.submitList(state.posts)
+//        viewModel.data.observe(viewLifecycleOwner) { state ->
+//            postAdapter.submitList(state.posts)
+//        }
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest {
+                postAdapter.submitData(it)
+            }
         }
 
         authViewModel.data.observe(viewLifecycleOwner) { state ->
@@ -146,7 +175,7 @@ class PostsFragment : Fragment() {
             }
 
             swipeRefresh.setOnRefreshListener {
-                viewModel.refreshPosts()
+                postAdapter.refresh()
             }
         }
 
@@ -168,16 +197,6 @@ class PostsFragment : Fragment() {
                     })
             }
         }
-
-        context?.let {
-            WorkManager.getInstance(it).getWorkInfosForUniqueWorkLiveData(RefreshPostsWorker.name)
-                .observe(viewLifecycleOwner) { workInfos ->
-                    for (info in workInfos) {
-                        Log.i("WOTRK INFO", info.state.toString())
-                    }
-                }
-        }
-
 
         return binding.root
     }
