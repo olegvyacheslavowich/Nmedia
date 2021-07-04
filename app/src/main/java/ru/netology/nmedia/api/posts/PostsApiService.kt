@@ -26,15 +26,20 @@ interface PostsApiService {
     suspend fun save(@Body post: Post): Response<Post>
 
     @GET("posts/{id}/newer")
-    suspend fun getNewer(@Path("id") id: Int) : Response<List<Post>>
+    suspend fun getNewer(@Path("id") id: Int): Response<List<Post>>
 
     @Multipart
     @POST("media")
     suspend fun upload(@Part media: MultipartBody.Part): Response<Media>
 
+    suspend fun getAfter(
+        @Path("id") id: Int,
+        @Query("count") count: Int
+    ): Response<List<Post>>
+
     @GET("posts/latest")
     suspend fun getLatest(@Query("count") count: Int): Response<List<Post>>
 
     @GET("posts/{id}/before")
-    suspend fun getBefore(@Path("id") id:Int, @Query("count") count: Int): Response<List<Post>>
+    suspend fun getBefore(@Path("id") id: Int, @Query("count") count: Int): Response<List<Post>>
 }

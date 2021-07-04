@@ -1,9 +1,9 @@
 package ru.netology.nmedia.db
 
-import android.content.Context
-import androidx.room.*
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import ru.netology.nmedia.db.dao.draftcontent.DraftContentDao
 import ru.netology.nmedia.db.dao.post.PostDao
 import ru.netology.nmedia.db.dao.work.PostWorkDao
