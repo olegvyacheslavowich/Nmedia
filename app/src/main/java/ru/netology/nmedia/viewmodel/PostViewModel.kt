@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.insertSeparators
 import androidx.paging.map
 import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,8 +16,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.MediaUpload
+import ru.netology.nmedia.model.AdModel
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
+import ru.netology.nmedia.model.PostModel
 import ru.netology.nmedia.model.ad.impl.AdRepositoryInMemoryImpl
 import ru.netology.nmedia.model.draftcontent.DraftContentRepository
 import ru.netology.nmedia.model.post.PhotoModel
@@ -28,6 +31,7 @@ import ru.netology.nmedia.work.DeletePostWorker
 import ru.netology.nmedia.work.SavePostWorker
 import java.io.File
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class PostViewModel @Inject constructor(
@@ -40,12 +44,18 @@ class PostViewModel @Inject constructor(
     private val cached = repository.data.cachedIn(viewModelScope)
 
     @ExperimentalCoroutinesApi
-    val data: Flow<PagingData<Post>> = appAuth
+    val data: Flow<PagingData<FeedModel>> = appAuth
         .authStateFlow
         .flatMapLatest { (myId, _) ->
-            cached.map { posts ->
-                posts.map { post ->
-                    post.copy(ownedByMe = post.authorId == myId)
+            cached.map { pagingData ->
+                pagingData.map { post ->
+                    PostModel(post.copy(ownedByMe = post.authorId == myId))
+                }.insertSeparators { post1: PostModel?, _ ->
+                    if (post1?.id?.rem(5) == 0) {
+                        AdModel(Random.nextInt())
+                    } else {
+                        null
+                    }
                 }
             }
         }

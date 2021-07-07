@@ -121,21 +121,20 @@ class PostsFragment : Fragment() {
 
         lifecycleScope.launchWhenCreated {
             postAdapter.loadStateFlow.collectLatest { state ->
-                binding.progressBar.isVisible =
-                    state.refresh is LoadState.Loading ||
-                            state.append is LoadState.Loading ||
-                            state.prepend is LoadState.Loading
 
-                if (state.refresh is LoadState.Error ||
-                    state.append is LoadState.Error ||
-                    state.prepend is LoadState.Error
-                ) {
-                    Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_SHORT)
-                        .setAction(R.string.retry_action_title) {
-                            viewModel.loadPosts()
-                        }
-                        .show()
+                binding.swipeRefresh.isRefreshing = state.refresh is LoadState.Loading
+                if (state.append is LoadState.Loading || state.prepend is LoadState.Error) {
+                    postAdapter.withLoadStateHeader(
+                        header = PagingLoadStateAdapter(postAdapter::retry)
+                    )
                 }
+
+                if (state.prepend is LoadState.Loading || state.append is LoadState.Error) {
+                    postAdapter.withLoadStateFooter(
+                        footer = PagingLoadStateAdapter(postAdapter::retry)
+                    )
+                }
+
             }
         }
 
@@ -185,12 +184,14 @@ class PostsFragment : Fragment() {
             adAdapter.submitList(it)
         }
 
-        val adapters = listOf(adAdapter, postAdapter)
-        val mergeAdapter = ConcatAdapter(adapters)
+        postAdapter.withLoadStateHeaderAndFooter(
+            header = PagingLoadStateAdapter(postAdapter::retry),
+            footer = PagingLoadStateAdapter(postAdapter::retry)
+        )
 
         binding.apply {
-            postsRecyclerView.adapter = mergeAdapter
 
+            postsRecyclerView.adapter = postAdapter
             postAddFab.setOnClickListener {
                 findNavController().navigate(R.id.action_postsFragment_to_postFragment,
                     Bundle().apply {
