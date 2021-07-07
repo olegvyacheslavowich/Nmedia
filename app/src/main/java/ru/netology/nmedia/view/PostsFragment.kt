@@ -39,11 +39,11 @@ class PostsFragment : Fragment() {
     }
 
     private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment,
+        ownerProducer = ::requireParentFragment
     )
 
     private val authViewModel: AuthViewModel by viewModels(
-        ownerProducer = ::requireParentFragment,
+        ownerProducer = ::requireParentFragment
     )
 
     @ExperimentalCoroutinesApi
@@ -54,6 +54,7 @@ class PostsFragment : Fragment() {
     ): View {
 
         val binding = FragmentPostsBinding.inflate(inflater, container, false)
+
         binding.swipeRefresh.setOnRefreshListener {
             binding.swipeRefresh.isRefreshing = true
             viewModel.loadPosts()
